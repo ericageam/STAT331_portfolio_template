@@ -63,6 +63,20 @@ military <- read_xlsx("gov_spending_per_capita.xlsx",
 
 ```{r}
 #| label: wd-2-ex-1
+# Challenge 3, Q1
+
+teacher_evals_compare <- teacher_evals |> 
+  filter(question_no == 903) |> 
+  mutate(
+    set_level = if_else(SET_score_avg >= 4, "excellent",
+                            "standard"),
+    sen_level = case_when(seniority <= 4 ~ "junior",
+                          seniority >= 5 & seniority <= 8 ~ "senior",
+                          seniority > 8 ~ "very senior")
+) |> 
+    select(course_id, set_level, sen_level)
+
+teacher_evals_compare
 
 ```
 
@@ -71,13 +85,22 @@ military <- read_xlsx("gov_spending_per_capita.xlsx",
 ```{r}
 #| label: wd-2-ex-2
 
+
 ```
 
 -   Example selecting columns based on logical values (e.g., `starts_with()`, `ends_with()`, `contains()`, `where()`)
 
 ```{r}
 #| label: wd-2-ex-3
+# Lab 4, Q7
 
+center_based_childcare <- ca_childcare |> 
+ filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
+ select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
+  pivot_longer(
+    cols = starts_with("mc_"),
+    names_to = "age_group",
+    values_to = "median_weekly_price"
 ```
 
 **WD-3: I can filter rows from a dataframe for a *variety* of data types (e.g., numeric, integer, character, factor, date).**
