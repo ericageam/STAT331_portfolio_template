@@ -54,7 +54,6 @@ military <- read_xlsx("gov_spending_per_capita.xlsx",
                       n_max = 191,
                       na = c("..", ". .", "xxx")
                       )
-
 ```
 
 **WD-2: I can select necessary columns from a dataset.**
@@ -77,7 +76,6 @@ teacher_evals_compare <- teacher_evals |>
     select(course_id, set_level, sen_level)
 
 teacher_evals_compare
-
 ```
 
 -   Example removing specified columns
@@ -110,6 +108,24 @@ center_based_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-3-numeric-ex-1
 
+#Lab 3
+
+teacher_evals_clean <- teacher_evals |> 
+  rename(sex = gender) |> 
+  filter(no_participants > 10) |> 
+  mutate(teacher_id = as.character(teacher_id)) |> 
+  select(teacher_id,
+        course_id,
+        question_no,
+        no_participants,
+        resp_share,
+        SET_score_avg,
+        percent_failed_cur,
+        academic_degree,
+        seniority,
+        sex)
+  
+teacher_evals_clean
 ```
 
 -   Numeric Example 2
@@ -117,6 +133,20 @@ center_based_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-3-numeric-ex-1
 
+#Lab 3
+
+teacher_evals_compare <- teacher_evals |> 
+  filter(question_no == 903) |> 
+  mutate(
+    set_level = if_else(SET_score_avg >= 4, "excellent",
+                            "standard"),
+    sen_level = case_when(seniority <= 4 ~ "junior",
+                          seniority >= 5 & seniority <= 8 ~ "senior",
+                          seniority > 8 ~ "very senior")
+) |> 
+    select(course_id, set_level, sen_level)
+
+teacher_evals_compare
 ```
 
 -   Character Example 1 (any context)
@@ -124,6 +154,28 @@ center_based_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-3-character
 
+#Lab 5
+person3 <- person |> 
+  left_join(get_fit_now_member |> 
+              rename(member_id = id),
+          by = join_by(name == name)
+          ) |> 
+  left_join(drivers_license,
+            by = join_by(license_id == id)
+            ) |> 
+  left_join(get_fit_now_check_in,
+            by = join_by(member_id == membership_id)
+            ) |> 
+   mutate(
+    check_in_date = ymd(check_in_date)
+  ) |> 
+filter(
+  membership_status == "gold",
+  str_detect(plate_number, pattern = "H42"), 
+  str_detect(member_id, pattern = "48Z"),
+  month(check_in_date) == 1
+)
+person3
 ```
 
 -   Character Example 2 (example must use functions from **stringr**)
@@ -131,6 +183,15 @@ center_based_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-3-string
 
+#Lab 5
+
+person2 <- person1 |> 
+  filter(
+    (address_street_name == "Franklin Ave" & str_detect(person$name, pattern = "^Annabel")) |
+    (address_street_name == "Northwestern Dr" & 
+       address_number == max(address_number[address_street_name == "Northwestern Dr"]))
+  )
+person2
 ```
 
 -   Date (example must use functions from **lubridate**)
@@ -138,6 +199,27 @@ center_based_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-3-date
 
+#Lab 5
+
+rich_woman <- person1 |> 
+  left_join(drivers_license,
+            by = join_by(license_id == id)
+            ) |> 
+  left_join(facebook_event_checkin,
+            by = join_by(id == person_id)
+            ) |> 
+  mutate(
+    date = ymd(date)
+  ) |> 
+  filter(
+    height %in% c ("65","66", "67"),
+    hair_color == "red",
+    car_make == "Tesla",
+    car_model == "Model S",
+    event_name == "SQL Symphony Concert",
+    month(date) == 12
+  ) 
+rich_woman
 ```
 
 **WD-4: I can modify existing variables and create new variables in a dataframe for a *variety* of data types (e.g., numeric, integer, character, factor, date).**
