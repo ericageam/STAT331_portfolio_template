@@ -155,6 +155,7 @@ teacher_evals_compare
 #| label: wd-3-character
 
 #Lab 5
+
 person3 <- person |> 
   left_join(get_fit_now_member |> 
               rename(member_id = id),
@@ -229,12 +230,28 @@ rich_woman
 ```{r}
 #| label: wd-4-numeric-ex-1
 
+#Challenge 3, Q1
+
+teacher_evals_compare <- teacher_evals |> 
+  filter(question_no == 903) |> 
+  mutate(
+    set_level = if_else(SET_score_avg >= 4, "excellent",
+                            "standard"),
+    sen_level = case_when(seniority <= 4 ~ "junior",
+                          seniority >= 5 & seniority <= 8 ~ "senior",
+                          seniority > 8 ~ "very senior")
+) |> 
+    select(course_id, set_level, sen_level)
+
+teacher_evals_compare
 ```
 
 -   Numeric Example 2
 
 ```{r}
 #| label: wd-4-numeric-ex-2
+
+
 
 ```
 
@@ -243,6 +260,7 @@ rich_woman
 ```{r}
 #| label: wd-4-factor-ex-1
 
+
 ```
 
 -   Factor Example 2 (reordering levels)
@@ -250,6 +268,42 @@ rich_woman
 ```{r}
 #| label: wd-4-factor-ex-2
 
+# Lab 4, Q7
+
+# https://www.youtube.com/watch?v=UVriK-W1DNg&t=760s I used this youtube video to help me rescale my x-axis to be the evenly spaced years from 2008 to 2018.
+
+center_based_childcare <- ca_childcare |> 
+ filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
+ select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
+  pivot_longer(
+    cols = starts_with("mc_"),
+    names_to = "age_group",
+    values_to = "median_weekly_price"
+  ) |> 
+  mutate (
+    age_group = fct_relevel(fct_recode(age_group,
+                                       "Infant" = "mc_infant",
+                                       "Toddler" = "mc_toddler",
+                                       "Preschool" = "mc_preschool"),
+                            "Infant",
+                            "Toddler",
+                            "Preschool"))
+  
+ggplot(data = center_based_childcare,
+       aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 0.7) + 
+  scale_color_brewer(palette = "Set3") + 
+  facet_wrap (~ age_group) +
+  scale_x_continuous(breaks = seq (2008, 2018, by = 2)) +
+  labs(
+    title = "Weekly Median Price for Center-Based Childcare ($)",
+    x = "Study Year",
+    y = "",
+    color = "California Region"
+  ) +
+  theme(aspect.ratio = 1,
+        axis.text.x = element_text(size = 6))
 ```
 
 -   Character (example must use functions from **stringr**)
@@ -257,6 +311,21 @@ rich_woman
 ```{r}
 #| label: wd-4-string
 
+#Lab 4, Q4
+
+ca_childcare <- ca_childcare |> 
+  mutate(county_name = str_remove(county_name, " County")) |> 
+  mutate(region = fct_collapse(county_name,
+        "Superior California" = superior_counties,
+        "North Coast" = north_coast_counties,
+        "San Francisco Bay Area" = san_fran_counties,
+        "Northern San Joaquin Valley" = n_san_joaquin_counties,
+        "Central Coast" = central_coast_counties,
+        "Southern San Joaquin Valley" = s_san_joaquin_counties,
+        "Inland Empire" = inland_counties,
+        "Los Angeles County" = la_county,
+        "Orange County" = orange_county,
+        "San Diego-Imperial" = san_diego_imperial_counties))
 ```
 
 -   Date (example must use functions from **lubridate**)
@@ -264,6 +333,29 @@ rich_woman
 ```{r}
 #| label: wd-4-date
 
+#Lab 5
+
+person3 <- person |> 
+  left_join(get_fit_now_member |> 
+              rename(member_id = id),
+          by = join_by(name == name)
+          ) |> 
+  left_join(drivers_license,
+            by = join_by(license_id == id)
+            ) |> 
+  left_join(get_fit_now_check_in,
+            by = join_by(member_id == membership_id)
+            ) |> 
+   mutate(
+    check_in_date = ymd(check_in_date)
+  ) |> 
+filter(
+  membership_status == "gold",
+  str_detect(plate_number, pattern = "H42"), 
+  str_detect(member_id, pattern = "48Z"),
+  month(check_in_date) == 1
+)
+person3
 ```
 
 **WD-5: I can use mutating joins to combine multiple dataframes.**
