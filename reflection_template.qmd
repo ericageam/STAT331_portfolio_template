@@ -91,6 +91,13 @@ teacher_evals_compare
 ```{r}
 #| label: wd-2-ex-3
 # Lab 4, Q7
+# Growing Comments: Nice work pivoting and modifying the age variable!
+# Nice work reordering your legend!
+# Can you reorder the facets so they go in the same order as mine?
+#I like your colors!!!
+
+#Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
+
 
 center_based_childcare <- ca_childcare |> 
  filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
@@ -108,12 +115,16 @@ center_based_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-3-numeric-ex-1
 
-#Lab 3
+#Lab 3, Q5
+#Success Comments: Should course_id be treated as a numerical variable? These are a proxy for a course subject and number. If the variable was recorded as STAT 331 then it would be read in as a character...
+#Addition: I changed'course_id' into a character variable.
 
 teacher_evals_clean <- teacher_evals |> 
   rename(sex = gender) |> 
   filter(no_participants > 10) |> 
-  mutate(teacher_id = as.character(teacher_id)) |> 
+  mutate(teacher_id = as.character(teacher_id),
+         course_id = as.character(course_id)
+         ) |> 
   select(teacher_id,
         course_id,
         question_no,
@@ -133,7 +144,7 @@ teacher_evals_clean
 ```{r}
 #| label: wd-3-numeric-ex-1
 
-#Lab 3
+#Challenge 3
 
 teacher_evals_compare <- teacher_evals |> 
   filter(question_no == 903) |> 
@@ -501,6 +512,13 @@ person2
 
 # https://www.youtube.com/watch?v=UVriK-W1DNg&t=760s I used this youtube video to help me rescale my x-axis to be the evenly spaced years from 2008 to 2018.
 
+# Growing Comments: Nice work pivoting and modifying the age variable!
+# Nice work reordering your legend!
+# Can you reorder the facets so they go in the same order as mine?
+#I like your colors!!!
+
+#Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
+
 center_based_childcare <- ca_childcare |> 
  filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
  select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
@@ -541,6 +559,10 @@ ggplot(data = center_based_childcare,
 #| label: wd-7-wide
 
 #Lab 4, Q5
+# Growing Comments: Nice work remembering to drop the groups! The second group would not have been dropped by default, so this is an important step to remember!
+# Can you give your column names better titles, so the reader knows what "2008" and "2018" represent? What are the values stored in these columns?
+
+#Revisions: My column names weren’t very explanatory, as they were just the years “2008” and “2018.” After listening to Dr. T’s feedback in Tuesday's lecture, I added names_prefix = “Median_income_” to rename my columns. Now, readers can better understand what the columns represent (the median income of each region for the years 2008 and 2018).
 
 region_median_income <- ca_childcare |> 
   filter(study_year %in% c(2008, 2018)) |> 
@@ -563,9 +585,9 @@ region_median_income
 
 The following assignments satisfy the above criteria:
 
--   Example 1
--   Example 2
--   Example 3
+-   Challenge 2
+-   Challenge 3
+-   Lab 5
 -   Example 4
 -   Example 5
 
@@ -575,21 +597,60 @@ The following assignments satisfy the above criteria:
 
 ```{r}
 #| label: r-2-1
+#| label: spicy-option-theme
 
+#Challenge 2, spicy-option-theme
+
+ggplot(data = surveys,
+       mapping = aes(x = weight, 
+                     y = species, 
+                     color = sex)) +
+  geom_jitter(alpha = 0.05) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Weight (g)", y = "Animal Species") +
+  scale_color_brewer(palette = "Dark2") +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank()) 
 ```
 
 -   Example of **dplyr** pipeline
 
 ```{r}
 #| label: r-2-2
+#| label: cleaning-data-for-junior-senior-comparison
 
+#Challenge 3, Q1
+
+teacher_evals_compare <- teacher_evals |> 
+  filter(question_no == 903) |> 
+  mutate(
+    set_level = if_else(SET_score_avg >= 4, "excellent",
+                            "standard"),
+    sen_level = case_when(seniority <= 4 ~ "junior",
+                          seniority >= 5 & seniority <= 8 ~ "senior",
+                          seniority > 8 ~ "very senior")
+) |> 
+    select(course_id, set_level, sen_level)
+
+teacher_evals_compare
 ```
 
 -   Example of function formatting
 
 ```{r}
 #| label: r-2-3
+#| label: jermey-bowers-interview
 
+#Lab 5, Jeremy Bowers Interview
+
+jeremy_bowers_interview <- interview |> 
+  right_join(person3,
+            by = join_by(person_id == id)
+            ) |> 
+  select(name, transcript)
+
+  
+jeremy_bowers_interview
 ```
 
 **R-3: I can write robust programs that are resistant to changes in inputs.**
