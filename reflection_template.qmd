@@ -497,6 +497,42 @@ person2
 ```{r}
 #| label: wd-7-long
 
+#Lab 4, Q7
+
+# https://www.youtube.com/watch?v=UVriK-W1DNg&t=760s I used this youtube video to help me rescale my x-axis to be the evenly spaced years from 2008 to 2018.
+
+center_based_childcare <- ca_childcare |> 
+ filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
+ select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
+  pivot_longer(
+    cols = starts_with("mc_"),
+    names_to = "age_group",
+    values_to = "median_weekly_price"
+  ) |> 
+  mutate (
+    age_group = fct_relevel(fct_recode(age_group,
+                                       "Infant" = "mc_infant",
+                                       "Toddler" = "mc_toddler",
+                                       "Preschool" = "mc_preschool"),
+                            "Infant",
+                            "Toddler",
+                            "Preschool"))
+  
+ggplot(data = center_based_childcare,
+       aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 0.7) + 
+  scale_color_brewer(palette = "Set3") + 
+  facet_wrap (~ age_group) +
+  scale_x_continuous(breaks = seq (2008, 2018, by = 2)) +
+  labs(
+    title = "Weekly Median Price for Center-Based Childcare ($)",
+    x = "Study Year",
+    y = "",
+    color = "California Region"
+  ) +
+  theme(aspect.ratio = 1,
+        axis.text.x = element_text(size = 6))
 ```
 
 -   `pivot_wider()`
@@ -504,6 +540,21 @@ person2
 ```{r}
 #| label: wd-7-wide
 
+#Lab 4, Q5
+
+region_median_income <- ca_childcare |> 
+  filter(study_year %in% c(2008, 2018)) |> 
+  group_by(region, study_year) |> 
+  summarize(median_income = median(mhi_2018, na.rm = TRUE),
+            .groups = "drop") |> 
+  pivot_wider(
+    names_from = study_year,
+    values_from = median_income,
+    names_prefix = "Median_Income_"
+  ) |> 
+  arrange(desc(`Median_Income_2018`))
+
+region_median_income
 ```
 
 ## Reproducibility
