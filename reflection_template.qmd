@@ -10,7 +10,7 @@ execute:
   echo: true
 ---
 
-[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an A.
+[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an A-.
 
 [**Learning Objective Evidence:**]{.underline} In the code chunks below, provide code from Lab or Challenge assignments where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify **where** the code came from (e.g., Lab 4 Question 2).
 
@@ -715,6 +715,23 @@ jeremy_bowers_interview
 ```{r}
 #| label: dvs-2-ex-2
 
+#Lab 4, Q7
+  
+ggplot(data = center_based_childcare,
+       aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 0.7) + 
+  scale_color_brewer(palette = "Set3") + 
+  facet_wrap (~ age_group) +
+  scale_x_continuous(breaks = seq (2008, 2018, by = 2)) +
+  labs(
+    title = "Weekly Median Price for Center-Based Childcare ($)",
+    x = "Study Year",
+    y = "",
+    color = "California Region"
+  ) +
+  theme(aspect.ratio = 1,
+        axis.text.x = element_text(size = 6))
 ```
 
 -   I can modify my plot titles to clearly communicate the data context
@@ -735,6 +752,24 @@ jeremy_bowers_interview
 
 ```{r}
 #| label: dvs-2-ex-5
+
+#Lab 4, Q7
+  
+ggplot(data = center_based_childcare,
+       aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 0.7) + 
+  scale_color_brewer(palette = "Set3") + 
+  facet_wrap (~ age_group) +
+  scale_x_continuous(breaks = seq (2008, 2018, by = 2)) +
+  labs(
+    title = "Weekly Median Price for Center-Based Childcare ($)",
+    x = "Study Year",
+    y = "",
+    color = "California Region"
+  ) +
+  theme(aspect.ratio = 1,
+        axis.text.x = element_text(size = 6))
 
 ```
 
@@ -970,6 +1005,8 @@ jeremy_bowers_interview
 ## Revising My Thinking
 
 <!-- How did you revise your thinking throughout the course? How did you revise your thinking on the code examples you have provided in your portfolio? -->
+
+\*Throughout the course, I was given helpful feedback for Dr. T on my labs and challenges. Each time a lab or challenge was graded, I would look
 
 <!-- For the revisions included in your Portfolio, to help me understand the nature of your revisions, please denote somehow the feedback I provided you (e.g., boldface, italics, colored text) before your revisions. -->
 
