@@ -22,6 +22,7 @@ execute:
 
 ```{r}
 #| label: wd-1-csv-1
+
 # Lab 3
 
 teacher_evals <- read_csv(here::here("Week 3", "Lab 3", "teacher_evals.csv"))
@@ -31,6 +32,7 @@ teacher_evals <- read_csv(here::here("Week 3", "Lab 3", "teacher_evals.csv"))
 
 ```{r}
 #| label: wd-1-csv-2
+
 # Lab 4
 
 childcare_costs <- read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-05-09/childcare_costs.csv')
@@ -44,6 +46,7 @@ tax_rev <- read_csv('https://atheobold.github.io/groupworthy-data-science/labs/i
 
 ```{r}
 #| label: wd-1-xlsx
+
 # PA 4
 
 library(tidyverse)
@@ -62,6 +65,7 @@ military <- read_xlsx("gov_spending_per_capita.xlsx",
 
 ```{r}
 #| label: wd-2-ex-1
+
 # Challenge 3, Q1
 
 teacher_evals_compare <- teacher_evals |> 
@@ -90,6 +94,7 @@ teacher_evals_compare
 
 ```{r}
 #| label: wd-2-ex-3
+
 # Lab 4, Q7
 # Growing Comments: Nice work pivoting and modifying the age variable!
 # Nice work reordering your legend!
@@ -607,7 +612,7 @@ The following assignments satisfy the above criteria:
 ```{r}
 #| label: r-2-1
 
-#Challenge 2, Q2 - spicy-option
+# Challenge 2, Q2 - spicy-option
 
 ggplot(data = surveys,
        mapping = aes(x = weight, 
@@ -626,7 +631,7 @@ ggplot(data = surveys,
 ```{r}
 #| label: r-2-2
 
-#Challenge 3, Q1
+# Challenge 3, Q1
 
 teacher_evals_compare <- teacher_evals |> 
   filter(question_no == 903) |> 
@@ -647,7 +652,7 @@ teacher_evals_compare
 ```{r}
 #| label: r-2-3
 
-#Lab 5, Jeremy Bowers Interview
+# Lab 5, Jeremy Bowers Interview
 
 jeremy_bowers_interview <- interview |> 
   right_join(person3,
@@ -684,7 +689,7 @@ jeremy_bowers_interview
 ```{r}
 #| label: dvs-1-num
 
-#Lab 4, Q8
+# Lab 4, Q8
 
 ggplot(data = ca_childcare, 
        aes(x = mhi_2018, y = mc_infant)) + 
@@ -702,10 +707,12 @@ ggplot(data = ca_childcare,
 ```{r}
 #| label: dvs-2-num-cat
 
-#Challenge 2, Q2- medium option
+# Challenge 2, Q2- medium option
 
 ggplot(data = surveys,
-       mapping = aes(x = weight, y = species, color = sex)) +
+       mapping = aes(x = weight, 
+                     y = species, 
+                     color = sex)) +
   geom_jitter(alpha = 0.05) +
   geom_boxplot(outlier.shape = NA) +
   labs(x = "Animal Species", y = "Weight (g)") +
@@ -726,7 +733,7 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-2-date
 
-#Lab 4, Q7
+# Lab 4, Q7
 
 ggplot(data = center_based_childcare,
        aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
@@ -759,7 +766,9 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: dvs-2-ex-2
 
-#Lab 4, Q7
+# Lab 4, Q7
+
+# I researched colorblind friendly color palettes, and 'Set3' was my favorite option from the RColorBrewer package.
   
 ggplot(data = center_based_childcare,
        aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
@@ -783,7 +792,7 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: dvs-2-ex-3
 
-#Challenge 3, Q2
+# Challenge 3, Q2
 
 ggplot(data = teacher_evals_compare, aes(x = sen_level, fill = set_level)) +
        geom_bar(position = "fill") +
@@ -799,12 +808,13 @@ theme(legend.position = "top")
 ```{r}
 #| label: dvs-2-ex-4
 
-#Lab 2, Q16
+# Lab 2, Q16
 
 # Rotated boxplot, makes it easier for people to read the name of the animal species
 
 ggplot(data = surveys,
-       mapping = aes(x = weight, y = species )) +
+       mapping = aes(x = weight, 
+                     y = species )) +
   geom_jitter(color = "steelblue", alpha = 0.05) +
   geom_boxplot(outlier.shape = NA) +
   labs(x = "Weight (g)", y = "Animal Species") +
@@ -816,7 +826,9 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-2-ex-5
 
-#Lab 4, Q7
+# Lab 4, Q7
+
+# I used fct_reorder2 to align the colors in the same order as the California regions in the plot
   
 ggplot(data = center_based_childcare,
        aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
@@ -842,8 +854,20 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: dvs-3-1-ex-1
 
+# Challenge 2, Q2- medium option
+
+# I like using "Set3" from the RColorBrewer package (colorblind friendly) and theme_bw, as the white background makes the plot easier to interpret
 
 
+ggplot(data = surveys,
+       mapping = aes(x = weight, 
+                     y = species, 
+                     color = sex)) +
+  geom_jitter(alpha = 0.05) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Animal Species", y = "Weight (g)") +
+  scale_color_brewer(palette = "Set3") +
+  theme_bw()
 ```
 
 -   I can use non-standard colors (Example 2)
@@ -851,6 +875,22 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: dvs-3-1-ex-2
 
+# Challenge 2, Q2 - spicy-option
+
+# I also added the 'Dark2' color palette because I wanted two contrasting colors for the viewer to easily differentiate between sex. 
+
+# I added theme_bw because the white background makes the boxplots more easier to see and interpret compared to a gray background.
+
+ggplot(data = surveys,
+       mapping = aes(x = weight, 
+                     y = species, 
+                     color = sex)) +
+  geom_jitter(alpha = 0.05) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Weight (g)", y = "Animal Species") +
+  scale_color_brewer(palette = "Dark2") +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank())
 ```
 
 -   I can use annotations (e.g., `geom_text()`)
@@ -1080,7 +1120,7 @@ Within my portfolio, I included both growing and success comments as well as my 
 
 <!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
 
-To extend my thinking, I revised some of my code in order to meet the requirements for certain learning objectives. For example, for learning objectives **wd-5-right**, **wd-5-inner-ex1**, and **wd-6-semi**, I changed my left-join() functions to a right-join(), inner-join(), and semi-join(), respectively. Moreover, as seen in learning objective **r-2-1**, (challenge 2), I used colorbrewerpalette() to change the colors of my boxplots, as I like to make my visualizations more unique and personalized. I also always like to include theme: cosmo in my YAML header and include a table of contents to make my documents more aesthetically pleasing and easy to navigate. Additionally, I make sure that all my code is readable and tidy by incorporating white space and named arguments.
+To extend my thinking, I revised some of my code in order to meet the requirements for certain learning objectives. For example, for learning objectives **wd-5-right**, **wd-5-inner-ex1**, and **wd-6-semi**, I changed my left-join() functions to a right-join(), inner-join(), and semi-join(), respectively. Moreover, as seen in learning objective **r-2-1**, (challenge 2), I used colorbrewerpalette() to change the colors of my boxplots, as I like to make my visualizations more unique and personalized. I also always like to include theme: cosmo in my YAML header and include a table of contents to make my documents more aesthetically pleasing and easy to navigate. Additionally, I make sure that all my code is readable and tidy by incorporating white space and named arguments. Lastly, in my portfolio, I added code comments (as seen in the Data Visualization) section to explain why I chose a palette, theme, or reordering in the plot.
 
 ## Peer Support & Collaboration
 
