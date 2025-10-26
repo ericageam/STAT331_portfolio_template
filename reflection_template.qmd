@@ -290,6 +290,13 @@ teacher_evals_compare
 
 # https://www.youtube.com/watch?v=UVriK-W1DNg&t=760s I used this youtube video to help me rescale my x-axis to be the evenly spaced years from 2008 to 2018.
 
+# Growing Comments: Nice work pivoting and modifying the age variable!
+# Nice work reordering your legend!
+# Can you reorder the facets so they go in the same order as mine?
+#I like your colors!!!
+
+#Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
+
 center_based_childcare <- ca_childcare |> 
  filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
  select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
@@ -384,6 +391,7 @@ person3
 #| label: wd-5-left-ex-1
 
 # Lab 4, Q3
+
 # Success Comment: Nice work noticing that there are two keys that need to be used for joining!
 # Do you need quotes for the column names???
 
@@ -1073,7 +1081,27 @@ region_median_income
 ```{r}
 #| label: pe-1-one-call
 
+# Lab 5, Jeremy Bowers' Lead
 
+rich_woman <- person1 |> 
+  left_join(drivers_license,
+            by = join_by(license_id == id)
+            ) |> 
+  left_join(facebook_event_checkin,
+            by = join_by(id == person_id)
+            ) |> 
+  mutate(
+    date = ymd(date)
+  ) |> 
+  filter(
+    height %in% c ("65","66", "67"),
+    hair_color == "red",
+    car_make == "Tesla",
+    car_model == "Model S",
+    event_name == "SQL Symphony Concert",
+    month(date) == 12
+  ) 
+rich_woman
 ```
 
 -   using `across()`
@@ -1143,6 +1171,7 @@ region_median_income
 ```{r}
 #| label: pe-4-1
 
+# Lab 4, 
 ```
 
 -   I can connect a data wrangling pipeline into a `ggplot()`
@@ -1150,6 +1179,49 @@ region_median_income
 ```{r}
 #| label: pe-4-2
 
+#Lab 4, Q7
+
+# https://www.youtube.com/watch?v=UVriK-W1DNg&t=760s I used this youtube video to help me rescale my x-axis to be the evenly spaced years from 2008 to 2018.
+
+# Growing Comments: Nice work pivoting and modifying the age variable!
+# Nice work reordering your legend!
+# Can you reorder the facets so they go in the same order as mine?
+#I like your colors!!!
+
+#Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
+
+center_based_childcare <- ca_childcare |> 
+ filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
+ select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
+  pivot_longer(
+    cols = starts_with("mc_"),
+    names_to = "age_group",
+    values_to = "median_weekly_price"
+  ) |> 
+  mutate (
+    age_group = fct_relevel(fct_recode(age_group,
+                                       "Infant" = "mc_infant",
+                                       "Toddler" = "mc_toddler",
+                                       "Preschool" = "mc_preschool"),
+                            "Infant",
+                            "Toddler",
+                            "Preschool"))
+  
+ggplot(data = center_based_childcare,
+       aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 0.7) + 
+  scale_color_brewer(palette = "Set3") + 
+  facet_wrap (~ age_group) +
+  scale_x_continuous(breaks = seq (2008, 2018, by = 2)) +
+  labs(
+    title = "Weekly Median Price for Center-Based Childcare ($)",
+    x = "Study Year",
+    y = "",
+    color = "California Region"
+  ) +
+  theme(aspect.ratio = 1,
+        axis.text.x = element_text(size = 6))
 ```
 
 ## Data Simulation & Statisical Models
@@ -1177,6 +1249,12 @@ region_median_income
 ```{r}
 #| label: dsm-2-1
 
+# Challenge 3, Q3
+
+# Chi-squared test
+
+chisq.test(table(teacher_evals_compare$set_level,
+                 teacher_evals_compare$sen_level))        
 ```
 
 -   Example 2
@@ -1184,6 +1262,12 @@ region_median_income
 ```{r}
 #| label: dsm-2-2
 
+# Lab 4, Q9
+
+# Linear regression
+
+ca_childcare <- lm(mc_infant ~ mhi_2018, data = ca_childcare)
+summary(ca_childcare)
 ```
 
 -   Example 3
