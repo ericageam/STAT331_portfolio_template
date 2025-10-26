@@ -121,6 +121,7 @@ center_based_childcare <- ca_childcare |>
 #| label: wd-3-numeric-ex-1
 
 # Lab 3, Q5
+
 # Success Comments: Should course_id be treated as a numerical variable? These are a proxy for a course subject and number. If the variable was recorded as STAT 331 then it would be read in as a character...
 
 # Addition: I changed'course_id' into a character variable.
@@ -573,10 +574,12 @@ ggplot(data = center_based_childcare,
 #| label: wd-7-wide
 
 # Lab 4, Q5
+
 # Growing Comments: Nice work remembering to drop the groups! The second group would not have been dropped by default, so this is an important step to remember!
+
 # Can you give your column names better titles, so the reader knows what "2008" and "2018" represent? What are the values stored in these columns?
 
-#Revisions: My column names weren’t very explanatory, as they were just the years “2008” and “2018.” After listening to Dr. T’s feedback in Tuesday's lecture, I added names_prefix = “Median_income_” to rename my columns. Now, readers can better understand what the columns represent (the median income of each region for the years 2008 and 2018).
+# Revisions: My column names weren’t very explanatory, as they were just the years “2008” and “2018.” After listening to Dr. T’s feedback in Tuesday's lecture, I added names_prefix = “Median_income_” to rename my columns. Now, readers can better understand what the columns represent (the median income of each region for the years 2008 and 2018).
 
 region_median_income <- ca_childcare |> 
   filter(study_year %in% c(2008, 2018)) |> 
@@ -914,12 +917,31 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-4-summarize
 
+# Lab 3, Q11
+
+# Growing Comments: This also suggests there is *one* max and *one* min. Is that the case? Were there ties?
+
+# Revisions: I mistakenly used slice(which.min()) which.max()), which only gave me the minimum and maximum of a [variable] for only one instructor, when in fact, there were multiple instructors that held the minimum and maximum of [variable], and were therefore tied. 
+
+# I replaced slice(which.min()) which.max()) with  filter(avg.resp_share == min(avg.resp_share) | avg.resp_share == max(avg.resp_share). As a result, I’ve discovered the instructors that were tied with each other regarding the lowest average percentage of students responding to the evaluations across courses.
+
+teacher_evals_clean |> 
+  filter(seniority == 1) |> 
+  group_by(teacher_id) |> 
+  summarize(
+  avg_percent_failed_cur = mean(percent_failed_cur, na.rm = TRUE),
+  .groups = "drop"
+) |> 
+  filter(
+        avg_percent_failed_cur == min(avg_percent_failed_cur) | avg_percent_failed_cur == max(avg_percent_failed_cur)
+  )
 ```
 
 -   Example using `across()`
 
 ```{r}
 #| label: dvs-4-across
+
 
 ```
 
@@ -930,6 +952,17 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-5-1
 
+# Lab 3, Q9
+
+#My classmate Alexa sent me this youtube video [https://www.youtube.com/watch?v=SYZvw3KcZqk], which helped me better understand the summarize function. 
+
+teacher_evals_clean |> 
+  group_by(teacher_id, course_id) |> 
+  summarize(
+  num_questions = n_distinct(question_no), .groups = "drop"
+  ) |>   
+  filter (num_questions == 9) |> 
+  summarize(total_all_nine_questions = n())
 ```
 
 -   Example 2
@@ -937,6 +970,15 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-5-2
 
+# Lab 4, Q6
+
+region_median_weekly_price <- ca_childcare |>
+ filter(study_year == 2018) |> 
+  group_by(region) |> 
+  summarize(median_weekly_price = median(mc_infant, na.rm = TRUE), .groups = "drop") |> 
+  slice(which.min(median_weekly_price))
+
+region_median_weekly_price
 ```
 
 **DVS-6: I can create tables which make my summaries clear to the reader.**
@@ -946,6 +988,27 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-6-ex-1
 
+# Lab 4, Q5
+
+# Growing Comments: Nice work remembering to drop the groups! The second group would not have been dropped by default, so this is an important step to remember!
+
+# Can you give your column names better titles, so the reader knows what "2008" and "2018" represent? What are the values stored in these columns?
+
+# Revisions: My column names weren’t very explanatory, as they were just the years “2008” and “2018.” After listening to Dr. T’s feedback in Tuesday's lecture, I added names_prefix = “Median_income_” to rename my columns. Now, readers can better understand what the columns represent (the median income of each region for the years 2008 and 2018).
+
+region_median_income <- ca_childcare |> 
+  filter(study_year %in% c(2008, 2018)) |> 
+  group_by(region, study_year) |> 
+  summarize(median_income = median(mhi_2018, na.rm = TRUE),
+            .groups = "drop") |> 
+  pivot_wider(
+    names_from = study_year,
+    values_from = median_income,
+    names_prefix = "Median_Income_"
+  ) |> 
+  arrange(desc(`Median_Income_2018`))
+
+region_median_income
 ```
 
 -   I can modify the text in my table to be more readable (e.g., bold face for column headers)
@@ -960,6 +1023,29 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-6-ex-3
 
+# Lab 4, Q5
+
+# Growing Comments: Nice work remembering to drop the groups! The second group would not have been dropped by default, so this is an important step to remember!
+
+# Can you give your column names better titles, so the reader knows what "2008" and "2018" represent? What are the values stored in these columns?
+
+# Revisions: My column names weren’t very explanatory, as they were just the years “2008” and “2018.” After listening to Dr. T’s feedback in Tuesday's lecture, I added names_prefix = “Median_income_” to rename my columns. Now, readers can better understand what the columns represent (the median income of each region for the years 2008 and 2018).
+
+# I used arrange() with desc() to sort the median income from highest to lowest income for each region. 
+
+region_median_income <- ca_childcare |> 
+  filter(study_year %in% c(2008, 2018)) |> 
+  group_by(region, study_year) |> 
+  summarize(median_income = median(mhi_2018, na.rm = TRUE),
+            .groups = "drop") |> 
+  pivot_wider(
+    names_from = study_year,
+    values_from = median_income,
+    names_prefix = "Median_Income_"
+  ) |> 
+  arrange(desc(`Median_Income_2018`))
+
+region_median_income
 ```
 
 **DVS-7: I show creativity in my tables.**
@@ -986,6 +1072,7 @@ ggplot(data = surveys,
 
 ```{r}
 #| label: pe-1-one-call
+
 
 ```
 
@@ -1112,7 +1199,7 @@ ggplot(data = surveys,
 
 Throughout the course, I was given very helpful feedback from Dr. T to improve my labs and challenges. Each time a lab or challenge was graded, I would carefully read the feedback and subsequently incorporate them into my code and revisions. For example, the growing comments informed me that I had redundant code, or should have made my plot axis labels more explanatory, to give context to the reader. Moreover, even if I recieved a 'success' on a question, I would go back and try to improve my code if Dr. T included some suggestions. In my revisions, I would thoroughly explain my mistakes and how I fixed them by using the correct syntax or necessary functions.
 
-Within my portfolio, I included both growing and success comments as well as my written revisions as code comments before my fixed code. Some of my examples include **wd-2-ex-3**, **wd-3-numeric-ex-1**, and **wd-5-left-ex-1**. Overall, I was able to grow as a coder by identifying what I needed to improve on, and then reflecting on them. As a result, I am reminded on how to write more efficient code in following labs and challenges.
+Within my portfolio, I included both growing and success comments as well as my written revisions as code comments before my fixed code. Some of my examples include **wd-2-ex-3**, **wd-3-numeric-ex-1**, and **dvs-4-summarize**. Overall, I was able to grow as a coder by identifying what I needed to improve on, and then reflecting on them. As a result, I am reminded on how to write more efficient code in following labs and challenges.
 
 <!-- For the revisions included in your Portfolio, to help me understand the nature of your revisions, please denote somehow the feedback I provided you (e.g., boldface, italics, colored text) before your revisions. -->
 
