@@ -117,6 +117,7 @@ center_based_childcare <- ca_childcare |>
 
 #Lab 3, Q5
 #Success Comments: Should course_id be treated as a numerical variable? These are a proxy for a course subject and number. If the variable was recorded as STAT 331 then it would be read in as a character...
+
 #Addition: I changed'course_id' into a character variable.
 
 teacher_evals_clean <- teacher_evals |> 
@@ -144,7 +145,7 @@ teacher_evals_clean
 ```{r}
 #| label: wd-3-numeric-ex-1
 
-#Challenge 3
+# Challenge 3
 
 teacher_evals_compare <- teacher_evals |> 
   filter(question_no == 903) |> 
@@ -165,7 +166,7 @@ teacher_evals_compare
 ```{r}
 #| label: wd-3-character
 
-#Lab 5
+#Lab 5, Wittness Leads
 
 person3 <- person |> 
   left_join(get_fit_now_member |> 
@@ -195,7 +196,7 @@ person3
 ```{r}
 #| label: wd-3-string
 
-#Lab 5
+#Lab 5, Inspecting Witnesses
 
 person2 <- person1 |> 
   filter(
@@ -211,7 +212,7 @@ person2
 ```{r}
 #| label: wd-3-date
 
-#Lab 5
+#Lab 5, Jeremy Bowers' Lead
 
 rich_woman <- person1 |> 
   left_join(drivers_license,
@@ -344,7 +345,7 @@ ca_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-4-date
 
-#Lab 5
+#Lab 5, Inspecting Witnesses
 
 person3 <- person |> 
   left_join(get_fit_now_member |> 
@@ -376,11 +377,15 @@ person3
 ```{r}
 #| label: wd-5-left-ex-1
 
-#Lab 5
+# Lab 4, Q3
+# Success Comment: Nice work noticing that there are two keys that need to be used for joining!
+# Do you need quotes for the column names???
+
+#Addition: I deleted the quotes for the column names, as they are unnecessary.
 
 ca_childcare <- ca_childcare |>
   left_join(tax_rev,
-          by = join_by("county_name" == "entity_name", "study_year" == "year")
+          by = join_by(county_name == entity_name, study_year == year)
           )
 
 ca_childcare
@@ -391,7 +396,7 @@ ca_childcare
 ```{r}
 #| label: wd-5-right
 
-#Lab 5
+#Lab 5, Jeremy Bowers Interview
 
 jeremy_bowers_interview <- interview |> 
   right_join(person3,
@@ -408,7 +413,7 @@ jeremy_bowers_interview
 ```{r}
 #| label: wd-5-left-right-ex-2
 
-#Lab 5
+#Lab 5, Jeremy Bowers' Lead
 
 rich_woman <- person1 |> 
   left_join(drivers_license,
@@ -436,7 +441,7 @@ rich_woman
 ```{r}
 #| label: wd-5-inner-ex-1
 
-#Lab 5
+#Lab 5, Wittness Leads
 
 person3 <- person |> 
   inner_join(get_fit_now_member |> 
@@ -474,7 +479,7 @@ person3
 
 ```{r}
 #| label: wd-6-semi
-# Lab 5
+# Lab 5, Inspecting Witnesses
 
 person2 <- person1 |> 
   filter(
@@ -1006,13 +1011,17 @@ ggplot(data = center_based_childcare,
 
 <!-- How did you revise your thinking throughout the course? How did you revise your thinking on the code examples you have provided in your portfolio? -->
 
-\*Throughout the course, I was given helpful feedback for Dr. T on my labs and challenges. Each time a lab or challenge was graded, I would look
+Throughout the course, I was given very helpful feedback from Dr. T to improve my labs and challenges. Each time a lab or challenge was graded, I would carefully read the feedback and subsequently incorporate them into my code and revisions. For example, the growing comments informed me that I had redundant code, or should have made my plot axis labels more explanatory, to give context to the reader. Moreover, even if I recieved a 'success' on a question, I would go back and try to improve my code if Dr. T included some suggestions. In my revisions, I would thoroughly explain my mistakes and how I fixed them by using the correct syntax or necessary functions.
+
+Within my portfolio, I included both growing and success comments as well as my written revisions as code comments before my fixed code. Some of my examples include **wd-2-ex-3**, **wd-3-numeric-ex-1**, and **wd-5-left-ex-1**. Overall, I was able to grow as a coder by identifying what I needed to improve on, and then reflecting on them. As a result, I am reminded on how to write more efficient code in labs and challenges,
 
 <!-- For the revisions included in your Portfolio, to help me understand the nature of your revisions, please denote somehow the feedback I provided you (e.g., boldface, italics, colored text) before your revisions. -->
 
 ## Extending My Thinking
 
 <!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
+
+Moreover, in order to meet the requirements for certain learning objectives, I revised some of my code. For example, for learning objectives
 
 ## Peer Support & Collaboration
 
