@@ -607,7 +607,7 @@ The following assignments satisfy the above criteria:
 ```{r}
 #| label: r-2-1
 
-#Challenge 2, spicy-option-theme
+#Challenge 2, Q2 - spicy-option
 
 ggplot(data = surveys,
        mapping = aes(x = weight, 
@@ -684,6 +684,17 @@ jeremy_bowers_interview
 ```{r}
 #| label: dvs-1-num
 
+#Lab 4, Q8
+
+ggplot(data = ca_childcare, 
+       aes(x = mhi_2018, y = mc_infant)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "green"  ) + 
+  labs(title = "Full-Time median weekly price for center-based childcare in CA (Infant)", 
+       x = "Median Household income in 2018 ($)", 
+       y = NULL) +
+  scale_y_continuous(labels = scales::label_currency(prefix = "$")) +
+  scale_x_continuous(labels = scales::label_currency(prefix = "$"))
 ```
 
 -   At least one numeric variable and one categorical variable
@@ -691,12 +702,22 @@ jeremy_bowers_interview
 ```{r}
 #| label: dvs-2-num-cat
 
+#Challenge 2, Q2- medium option
+
+ggplot(data = surveys,
+       mapping = aes(x = weight, y = species, color = sex)) +
+  geom_jitter(alpha = 0.05) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Animal Species", y = "Weight (g)") +
+  scale_color_brewer(palette = "Set3") +
+  theme_bw()
 ```
 
 -   At least two categorical variables
 
 ```{r}
 #| label: dvs-2-cat
+
 
 ```
 
