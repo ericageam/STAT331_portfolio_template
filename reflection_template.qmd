@@ -115,10 +115,10 @@ center_based_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-3-numeric-ex-1
 
-#Lab 3, Q5
-#Success Comments: Should course_id be treated as a numerical variable? These are a proxy for a course subject and number. If the variable was recorded as STAT 331 then it would be read in as a character...
+# Lab 3, Q5
+# Success Comments: Should course_id be treated as a numerical variable? These are a proxy for a course subject and number. If the variable was recorded as STAT 331 then it would be read in as a character...
 
-#Addition: I changed'course_id' into a character variable.
+# Addition: I changed'course_id' into a character variable.
 
 teacher_evals_clean <- teacher_evals |> 
   rename(sex = gender) |> 
@@ -166,7 +166,7 @@ teacher_evals_compare
 ```{r}
 #| label: wd-3-character
 
-#Lab 5, Wittness Leads
+# Lab 5, Wittness Leads
 
 person3 <- person |> 
   left_join(get_fit_now_member |> 
@@ -196,7 +196,7 @@ person3
 ```{r}
 #| label: wd-3-string
 
-#Lab 5, Inspecting Witnesses
+# Lab 5, Inspecting Witnesses
 
 person2 <- person1 |> 
   filter(
@@ -212,7 +212,7 @@ person2
 ```{r}
 #| label: wd-3-date
 
-#Lab 5, Jeremy Bowers' Lead
+# Lab 5, Jeremy Bowers' Lead
 
 rich_woman <- person1 |> 
   left_join(drivers_license,
@@ -242,7 +242,7 @@ rich_woman
 ```{r}
 #| label: wd-4-numeric-ex-1
 
-#Challenge 3, Q1
+# Challenge 3, Q1
 
 teacher_evals_compare <- teacher_evals |> 
   filter(question_no == 903) |> 
@@ -323,7 +323,7 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: wd-4-string
 
-#Lab 4, Q4
+# Lab 4, Q4
 
 ca_childcare <- ca_childcare |> 
   mutate(county_name = str_remove(county_name, " County")) |> 
@@ -345,7 +345,7 @@ ca_childcare <- ca_childcare |>
 ```{r}
 #| label: wd-4-date
 
-#Lab 5, Inspecting Witnesses
+# Lab 5, Inspecting Witnesses
 
 person3 <- person |> 
   left_join(get_fit_now_member |> 
@@ -396,7 +396,8 @@ ca_childcare
 ```{r}
 #| label: wd-5-right
 
-#Lab 5, Jeremy Bowers Interview
+# Lab 5, Jeremy Bowers Interview
+# right-join()- revised
 
 jeremy_bowers_interview <- interview |> 
   right_join(person3,
@@ -441,7 +442,8 @@ rich_woman
 ```{r}
 #| label: wd-5-inner-ex-1
 
-#Lab 5, Wittness Leads
+# Lab 5, Wittness Leads
+# inner-join() revised
 
 person3 <- person |> 
   inner_join(get_fit_now_member |> 
@@ -479,7 +481,9 @@ person3
 
 ```{r}
 #| label: wd-6-semi
+
 # Lab 5, Inspecting Witnesses
+# semi-join() revised
 
 person2 <- person1 |> 
   filter(
@@ -563,7 +567,7 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: wd-7-wide
 
-#Lab 4, Q5
+# Lab 4, Q5
 # Growing Comments: Nice work remembering to drop the groups! The second group would not have been dropped by default, so this is an important step to remember!
 # Can you give your column names better titles, so the reader knows what "2008" and "2018" represent? What are the values stored in these columns?
 
@@ -602,7 +606,6 @@ The following assignments satisfy the above criteria:
 
 ```{r}
 #| label: r-2-1
-#| label: spicy-option-theme
 
 #Challenge 2, spicy-option-theme
 
@@ -622,7 +625,6 @@ ggplot(data = surveys,
 
 ```{r}
 #| label: r-2-2
-#| label: cleaning-data-for-junior-senior-comparison
 
 #Challenge 3, Q1
 
@@ -644,7 +646,6 @@ teacher_evals_compare
 
 ```{r}
 #| label: r-2-3
-#| label: jermey-bowers-interview
 
 #Lab 5, Jeremy Bowers Interview
 
@@ -1013,7 +1014,7 @@ ggplot(data = center_based_childcare,
 
 Throughout the course, I was given very helpful feedback from Dr. T to improve my labs and challenges. Each time a lab or challenge was graded, I would carefully read the feedback and subsequently incorporate them into my code and revisions. For example, the growing comments informed me that I had redundant code, or should have made my plot axis labels more explanatory, to give context to the reader. Moreover, even if I recieved a 'success' on a question, I would go back and try to improve my code if Dr. T included some suggestions. In my revisions, I would thoroughly explain my mistakes and how I fixed them by using the correct syntax or necessary functions.
 
-Within my portfolio, I included both growing and success comments as well as my written revisions as code comments before my fixed code. Some of my examples include **wd-2-ex-3**, **wd-3-numeric-ex-1**, and **wd-5-left-ex-1**. Overall, I was able to grow as a coder by identifying what I needed to improve on, and then reflecting on them. As a result, I am reminded on how to write more efficient code in labs and challenges,
+Within my portfolio, I included both growing and success comments as well as my written revisions as code comments before my fixed code. Some of my examples include **wd-2-ex-3**, **wd-3-numeric-ex-1**, and **wd-5-left-ex-1**. Overall, I was able to grow as a coder by identifying what I needed to improve on, and then reflecting on them. As a result, I am reminded on how to write more efficient code in following labs and challenges.
 
 <!-- For the revisions included in your Portfolio, to help me understand the nature of your revisions, please denote somehow the feedback I provided you (e.g., boldface, italics, colored text) before your revisions. -->
 
@@ -1021,10 +1022,24 @@ Within my portfolio, I included both growing and success comments as well as my 
 
 <!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
 
-Moreover, in order to meet the requirements for certain learning objectives, I revised some of my code. For example, for learning objectives
+To extend my thinking, I revised some of my code in order to meet the requirements for certain learning objectives. For example, for learning objectives **wd-5-right**, **wd-5-inner-ex1**, and **wd-6-semi**, I changed my left-join() functions to a right-join(), inner-join(), and semi-join(), respectively. Moreover, as seen in learning objective **r-2-1**, (challenge 2), I used colorbrewerpalette() to change the colors of my boxplots, as I like to make my visualizations more unique and personalized. I also always like to include theme: cosmo in my YAML header and include a table of contents to make my documents more aesthetically pleasing and easy to navigate. Additionally, I make sure that all my code is readable and tidy by incorporating white space and named arguments.
 
 ## Peer Support & Collaboration
 
 <!-- Include an image or a description of feedback you gave that you are proud of (either in a peer review or in Discord). -->
 
 <!-- Include a description of how you grew as a collaborator through the weekly pair programming activities.   -->
+
+Each time we are assigned peer reviews, I like to give positive feedback on what my peers excelled in, as well as some helpful feedback on how they can improve their code.
+
+For example, here is my peer review for **Lab 2: Exploring Rodents with ggplot2**:
+
+*Great job on making your code very readable! I like how you consistently used named arguments (e.g. ggplot(data = surveys...) and (color = "orange3") in your code, as it gives a better understanding on what you were trying to achieve. Moreover, amazing job using white spaces between each character (once again, making your code easily digestible).*
+
+*However, for question 15, you didn't turn the x-axis labels 45 degrees to prevent the overlapping of the text. Therefore, we couldn't see the species names. If you go back to question 15, Dr. T provided us the starter code to prevent this from happening!*
+
+*Moreover, one little mistake you might've missed was in the challenge assignment, where you didn't include the proper measurement (g) on the x-axis for weight.*
+
+*Overall, great job!!*
+
+Furthermore, I also really enjoyed collaborating with my peers through the weekly paired programming activities. I was able to grow as a collaborator by learning
