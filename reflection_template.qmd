@@ -1042,4 +1042,4 @@ For example, here is my peer review for **Lab 2: Exploring Rodents with ggplot2*
 
 *Overall, great job!!*
 
-Furthermore, I also really enjoyed collaborating with my peers through the weekly paired programming activities. I was able to grow as a collaborator by learning
+Furthermore, I also really enjoyed collaborating with my peers through the weekly paired programming activities. Through them, I was able to grow as a collaborator by not only navigating my own learning style, but learning how to work with my partners in a more equitable manner through the coder/developer roles. I believe that a crucial part of education is learning from each other, which undoubtedly requires harmonious group dynamics and fairness. With my partners, I always tried my best to adhere to the roles. Whenever it was my turn to be the coder, I would happily offer my opinions and suggestions to my partner. When it would be my turn to be the developer, I would listen to my partner and type their proposals even at times where I knew the correct function or syntax. Whenever we were both stuck on a question, I made sure I had my partner's approval to request help from Dr. T or the TA.
