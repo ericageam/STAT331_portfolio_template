@@ -10,7 +10,7 @@ execute:
   echo: true
 ---
 
-[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an A-.
+[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an B+.
 
 [**Learning Objective Evidence:**]{.underline} In the code chunks below, provide code from Lab or Challenge assignments where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify **where** the code came from (e.g., Lab 4 Question 2).
 
@@ -99,9 +99,9 @@ teacher_evals_compare
 # Growing Comments: Nice work pivoting and modifying the age variable!
 # Nice work reordering your legend!
 # Can you reorder the facets so they go in the same order as mine?
-#I like your colors!!!
+# I like your colors!!!
 
-#Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
+# Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
 # I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool)
 
 center_based_childcare <- ca_childcare |> 
@@ -124,7 +124,7 @@ center_based_childcare <- ca_childcare |>
 
 # Success Comments: Should course_id be treated as a numerical variable? These are a proxy for a course subject and number. If the variable was recorded as STAT 331 then it would be read in as a character...
 
-# Addition: I changed'course_id' into a character variable.
+# Addition: I changed 'course_id' into a character variable.
 
 teacher_evals_clean <- teacher_evals |> 
   rename(sex = gender) |> 
@@ -149,7 +149,7 @@ teacher_evals_clean
 -   Numeric Example 2
 
 ```{r}
-#| label: wd-3-numeric-ex-1
+#| label: wd-3-numeric-ex-2
 
 # Challenge 3, Q1
 
@@ -293,9 +293,9 @@ teacher_evals_compare
 # Growing Comments: Nice work pivoting and modifying the age variable!
 # Nice work reordering your legend!
 # Can you reorder the facets so they go in the same order as mine?
-#I like your colors!!!
+# I like your colors!!!
 
-#Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
+# Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
 # I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool)
 
 center_based_childcare <- ca_childcare |> 
@@ -523,6 +523,8 @@ person2
 ```{r}
 #| label: wd-6-anti
 
+
+
 ```
 
 **WD-7: I can pivot dataframes from long to wide and visa versa**
@@ -539,9 +541,9 @@ person2
 # Growing Comments: Nice work pivoting and modifying the age variable!
 # Nice work reordering your legend!
 # Can you reorder the facets so they go in the same order as mine?
-#I like your colors!!!
+# I like your colors!!!
 
-#Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
+# Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
 # I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool)
 
 center_based_childcare <- ca_childcare |> 
@@ -772,6 +774,17 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: dvs-2-ex-1
 
+# Lab 2, Q16
+
+# The theme_bw() makes the plot background black and white, making it easier to interpret than the default theme
+
+ggplot(data = surveys,
+       mapping = aes(x = weight, 
+                     y = species )) +
+  geom_jitter(color = "steelblue", alpha = 0.05) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Weight (g)", y = "Animal Species") +
+  theme_bw()
 ```
 
 -   I can modify my colors to be accessible to anyone's eyes
@@ -1143,7 +1156,7 @@ rich_woman
 
 ```
 
-**PE-3:I can use iteration to reduce repetition in my code.**
+**PE-3: I can use iteration to reduce repetition in my code.**
 
 -   using `across()`
 
@@ -1306,7 +1319,7 @@ summary(ca_childcare)
 
 Throughout the course, I was given very helpful feedback from Dr. T to improve my labs and challenges. Each time a lab or challenge was graded, I would carefully read the feedback and subsequently incorporate them into my code and revisions. For example, the growing comments informed me that I had redundant code, or should have made my plot axis labels more explanatory, to give context to the reader. Moreover, even if I recieved a 'success' on a question, I would go back and try to improve my code if Dr. T included some suggestions. In my revisions, I would thoroughly explain my mistakes and how I fixed them by using the correct syntax or necessary functions.
 
-Within my portfolio, I included both growing and success comments as well as my written revisions as code comments before my fixed code. Some of my examples include **wd-2-ex-3**, **wd-3-numeric-ex-1**, and **dvs-4-summarize**. Overall, I was able to grow as a coder by identifying what I needed to improve on, and then reflecting on them. As a result, I am reminded on how to write more efficient code in following labs and challenges.
+Within my portfolio, I included both growing and success comments as well as my written revisions as code comments before my fixed code. Some of these examples include **wd-2-ex-3**, **wd-3-numeric-ex-1**, and **dvs-4-summarize**. Overall, I was able to grow as a coder by identifying what I needed to improve on, and then reflecting on them. As a result, I am reminded on how to write more efficient code in following labs and challenges.
 
 <!-- For the revisions included in your Portfolio, to help me understand the nature of your revisions, please denote somehow the feedback I provided you (e.g., boldface, italics, colored text) before your revisions. -->
 
@@ -1314,7 +1327,7 @@ Within my portfolio, I included both growing and success comments as well as my 
 
 <!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
 
-To extend my thinking, I revised some of my code in order to meet the requirements for certain learning objectives. For example, for learning objectives **wd-5-right**, **wd-5-inner-ex1**, and **wd-6-semi**, I changed my left-join() functions to a right-join(), inner-join(), and semi-join(), respectively. Moreover, as seen in learning objective **r-2-1**, (challenge 2), I used colorbrewerpalette() to change the colors of my boxplots, as I like to make my visualizations more unique and personalized. I also always like to include theme: cosmo in my YAML header and include a table of contents to make my documents more aesthetically pleasing and easy to navigate. Additionally, I make sure that all my code is readable and tidy by incorporating white space and named arguments. Lastly, in my portfolio, I added code comments (as seen in the Data Visualization) section to explain why I chose a palette, theme, or reordering in the plot.
+To extend my thinking, I revised some of my code in order to meet the requirements for certain learning objectives. For example, for learning objectives **wd-5-right**, **wd-5-inner-ex1**, and **wd-6-semi**, I changed my left-join() functions to a right-join(), inner-join(), and semi-join(), respectively. Moreover, as seen in learning objective **r-2-1**, (challenge 2), I used colorbrewerpalette() to change the colors of my boxplots, as I like to make my visualizations more unique and personalized. I also always like to include **theme: cosmo** in my YAML header and include a table of contents to make my documents more aesthetically pleasing and easy to navigate. Additionally, I make sure that all my code is readable and tidy by incorporating white space and named arguments. Lastly, in my portfolio, I added code comments (as seen in the Data Visualization) section to explain why I chose a palette, theme, or did a reordering in the plot.
 
 ## Peer Support & Collaboration
 
@@ -1334,4 +1347,4 @@ For example, here is my peer review for **Lab 2: Exploring Rodents with ggplot2*
 
 *Overall, great job!!*
 
-Furthermore, I also really enjoyed collaborating with my peers through the weekly paired programming activities. Through them, I was able to grow as a collaborator by not only navigating my own learning style, but learning how to work with my partners in a more equitable manner through the coder/developer roles. I believe that a crucial part of education is learning from each other, which undoubtedly requires harmonious group dynamics and fairness. With my partners, I always tried my best to adhere to the roles. Whenever it was my turn to be the coder, I would happily offer my opinions and suggestions to my partner. When it would be my turn to be the developer, I would listen to my partner and type their proposals even at times where I knew the correct function or syntax. Lastly, whenever we were both stuck on a question, I made sure I had my partner's approval to request help from Dr. T or the TA.
+Furthermore, I also really enjoyed collaborating with my peers through the weekly paired programming activities. Through them, I was able to grow as a collaborator by not only navigating my own learning style, but learning how to work with my partners in a more equitable manner through the coder/developer roles. I believe that a crucial part of education is learning from each other, which undoubtedly requires harmonious group dynamics and equity. With my partners, I always tried my best to adhere to the roles. Whenever it was my turn to be the coder, I would happily offer my opinions and suggestions to my partner. When it would be my turn to be the developer, I would listen to my partner and type their proposals even at times where I knew the correct function or syntax. Lastly, whenever we were both stuck on a question, I made sure I had my partner's approval to request help from Dr. T or the TA.
