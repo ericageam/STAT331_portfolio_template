@@ -102,11 +102,11 @@ teacher_evals_compare
 # I like your colors!!!
 
 # Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
-# I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool)
+# I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool) and deleted them from my select, as it was redundant
 
 center_based_childcare <- ca_childcare |> 
  filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
- select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
+ select(region, study_year) |> 
   pivot_longer(
     cols = starts_with("mc_"),
     names_to = "age_group",
@@ -206,7 +206,7 @@ person3
 
 person2 <- person1 |> 
   filter(
-    (address_street_name == "Franklin Ave" & str_detect(person$name, pattern = "^Annabel")) |
+    (address_street_name == "Franklin Ave" & str_detect(name, pattern = "^Annabel")) |
     (address_street_name == "Northwestern Dr" & 
        address_number == max(address_number[address_street_name == "Northwestern Dr"]))
   )
@@ -306,7 +306,7 @@ center_based_childcare <- ca_childcare |>
     names_to = "age_group",
     values_to = "median_weekly_price"
   ) |> 
-  mutate (
+  mutate(
     age_group = fct_relevel(fct_recode(age_group,
                                        "Infant" = "mc_infant",
                                        "Toddler" = "mc_toddler",
@@ -834,17 +834,23 @@ theme(legend.position = "top")
 ```{r}
 #| label: dvs-2-ex-4
 
-# Lab 2, Q16
+# Lab 8, Q3
 
-# Rotated boxplot, makes it easier for people to read the name of the animal species
-
-ggplot(data = surveys,
-       mapping = aes(x = weight, 
-                     y = species )) +
-  geom_jitter(color = "steelblue", alpha = 0.05) +
-  geom_boxplot(outlier.shape = NA) +
-  labs(x = "Weight (g)", y = "Animal Species") +
-  theme_bw()
+ ggplot(mapping = aes(x = {{ x }},
+                         y = {{ y }},
+                         color = {{z}}
+                         )) + 
+    geom_point() +
+      geom_smooth(method = "lm", se = TRUE ) +
+      labs(title = label,
+           x = x_clean, 
+           y = y_clean) +
+    theme_bw() +
+    theme(
+      legend.position = "none",
+      plot.title = element_text(size = 12)
+      )
+   
 ```
 
 -   I can reorder my legend to align with the colors in my plot
@@ -1124,6 +1130,13 @@ rich_woman
 ```{r}
 #| label: pe-1-across
 
+# Lab 7, Q1
+
+fish_na <- fish |> 
+   summarise(
+    across(everything(), ~ sum(is.na(.x)))
+  )
+fish_na
 ```
 
 -   using functions from the `map()` family
@@ -1131,6 +1144,15 @@ rich_woman
 ```{r}
 #| label: pe-1-map-1
 
+# Lab 9, Q4
+
+teacher_evals_factors <- teacher_evals |> 
+  map_at(
+    .at = c("course_id", "weekday", "academic_degree", "time_of_day", "sex"), 
+    .f = as.factor) |> 
+  bind_cols()
+
+teacher_evals_factors
 ```
 
 **PE-2: I can write functions to reduce repetition in my code.**
@@ -1140,6 +1162,18 @@ rich_woman
 ```{r}
 #| label: pe-2-1
 
+# Lab 7, Q4
+
+rescale_01 <- function(x) {
+  stopifnot(is.numeric(x),
+            length(x) > 1)
+  rng <- range(x, na.rm = TRUE)
+  rescaled <- (x-rng[1]) / (rng[2] - rng [1])
+  
+  return(rescaled)
+}
+fish_rescaled <- fish |> 
+  mutate(across(c(weight, length), rescale_01))
 ```
 
 -   Example 2: Function that operates on data frames
@@ -1147,6 +1181,21 @@ rich_woman
 ```{r}
 #| label: pe-2-2
 
+# Lab 8, Q2
+
+pivot_table <- function(df, col_var, row_var){
+  df |>
+    count({{col_var}}, {{row_var}}) |>
+      pivot_wider(names_from = {{col_var}},
+                 values_from = n,
+                 values_fill = 0) |> 
+  adorn_totals('row') |> 
+    adorn_totals('col')
+}
+
+pivot_table(df = penguins,
+           row_var = species,
+           col_var = island)
 ```
 
 -   Example 3: Function that operates on vectors *or* data frames
@@ -1170,6 +1219,13 @@ rich_woman
 ```{r}
 #| label: pe-3-map-1
 
+# Lab 9, Q2
+
+surveys |> 
+  map_chr(~ class(.x)) |> 
+  enframe(name = "variable",
+          value = "data_type") |> 
+kable()
 ```
 
 -   using a `map()` function with **more than one** input (e.g., `map_2()` or `pmap()`)
@@ -1177,6 +1233,11 @@ rich_woman
 ```{r}
 #| label: pe-3-map-2
 
+# Lab 9, Q5
+
+ map_at(
+    .at = c("course_id", "weekday", "academic_degree", "time_of_day", "sex"), 
+    .f = as.factor)
 ```
 
 **PE-4: I can use modern tools when carrying out my analysis.**
@@ -1269,6 +1330,21 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: dsm-1-1
 
+# Lab 10, Q1
+
+randomBabies <- function(n = 4){
+  baby_data <- tibble(baby = 1:n,
+    family = sample(1:n,
+                    size = n, 
+                    replace = FALSE)
+  )
+
+  double_babies <- baby_data |> 
+    filter(baby == family) |> 
+    nrow()
+  return(double_babies)
+
+}
 ```
 
 -   Example 2
@@ -1276,6 +1352,41 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: dsm-1-2
 
+# Lab 10, Q 8
+
+true_slope <- 1
+
+mycifun <- function(beta0, beta1, n) {
+# generate x vector
+x <- runif(n, min = 0, max = 1)
+# generate noise `ep` vector
+ep <- rnorm(n, mean = 0, sd = 1)
+# generate outcome from population model
+y = beta0 + x*beta1 + ep
+
+# create an "observed data" dataframe with only the x and y vectors
+observed_data <- data.frame(
+  x = x,
+  y = y
+)
+  model <- lm(y ~ x, 
+            data = observed_data) 
+# check that the population slope is contained in the estimated 95% confidence interval for the sample slope
+  tidy_model <- broom::tidy(model,
+            conf.int = TRUE,
+            conf.level = 0.95) |> 
+    select(term, estimate, conf.low, conf.high)
+
+  tidy_model <- tidy_model |> 
+    filter(term == "x") |> 
+  mutate(
+    cover = if_else(
+      beta1 >= conf.low & beta1 <= conf.high, 1,
+      0
+    )
+  )
+return(tidy_model)
+}
 ```
 
 **DSSM-2: I can conduct common statistical analyses in R.**
