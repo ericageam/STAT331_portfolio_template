@@ -10,7 +10,7 @@ execute:
   echo: true
 ---
 
-[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an B+.
+[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an A.
 
 [**Learning Objective Evidence:**]{.underline} In the code chunks below, provide code from Lab or Challenge assignments where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify **where** the code came from (e.g., Lab 4 Question 2).
 
@@ -87,6 +87,7 @@ teacher_evals_compare
 ```{r}
 #| label: wd-2-ex-2
 
+# Lab 3, Q5
 
 ```
 
@@ -172,6 +173,24 @@ teacher_evals_compare
 ```{r}
 #| label: wd-3-character
 
+# Lab 4, Q2
+
+ca_childcare <- counties |> 
+  filter(
+    state_name == "California"
+    ) |> 
+left_join(y = childcare_costs,
+          by = join_by(county_fips_code == county_fips_code)
+          )
+ca_childcare
+
+```
+
+-   Character Example 2 (example must use functions from **stringr**)
+
+```{r}
+#| label: wd-3-string
+
 # Lab 5, Wittness Leads
 
 person3 <- person |> 
@@ -195,22 +214,6 @@ filter(
   month(check_in_date) == 1
 )
 person3
-```
-
--   Character Example 2 (example must use functions from **stringr**)
-
-```{r}
-#| label: wd-3-string
-
-# Lab 5, Inspecting Witnesses
-
-person2 <- person1 |> 
-  filter(
-    (address_street_name == "Franklin Ave" & str_detect(name, pattern = "^Annabel")) |
-    (address_street_name == "Northwestern Dr" & 
-       address_number == max(address_number[address_street_name == "Northwestern Dr"]))
-  )
-person2
 ```
 
 -   Date (example must use functions from **lubridate**)
@@ -269,8 +272,19 @@ teacher_evals_compare
 ```{r}
 #| label: wd-4-numeric-ex-2
 
+# Lab 9, Q5
 
-
+pivot_longer(
+      cols = c(`Academic Degree`, Seniority, Sex),
+      names_to = "variable",
+      values_to = "level") |> 
+    count(variable, level) |> 
+    group_by(variable) |> 
+    mutate(prop = n/sum(n)) |> 
+    ungroup() |> 
+  kable() |> 
+  kable_styling(full_width = FALSE,
+                bootstrap_options = "striped")
 ```
 
 -   Factor Example 1 (renaming levels)
@@ -278,6 +292,24 @@ teacher_evals_compare
 ```{r}
 #| label: wd-4-factor-ex-1
 
+# Lab 7, Q3
+
+fish_na_visual <- fish |> 
+  group_by(
+    year,
+    section,
+    trip
+  ) |> 
+  summarise(
+    total_missing = sum(across(everything(), ~ sum(is.na(.x)))),
+    .groups = "drop"
+  ) |> 
+  mutate(
+    trip = as.factor(trip),
+    trip = fct_recode(trip,
+                      "Trip 1" = "1",
+                      "Trip 2" = "2")
+  )
 
 ```
 
@@ -300,7 +332,7 @@ teacher_evals_compare
 
 center_based_childcare <- ca_childcare |> 
  filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
- select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
+ select(region, study_year) |> 
   pivot_longer(
     cols = starts_with("mc_"),
     names_to = "age_group",
@@ -337,21 +369,17 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: wd-4-string
 
-# Lab 4, Q4
+# Lab 8, Q3
 
-ca_childcare <- ca_childcare |> 
-  mutate(county_name = str_remove(county_name, " County")) |> 
-  mutate(region = fct_collapse(county_name,
-        "Superior California" = superior_counties,
-        "North Coast" = north_coast_counties,
-        "San Francisco Bay Area" = san_fran_counties,
-        "Northern San Joaquin Valley" = n_san_joaquin_counties,
-        "Central Coast" = central_coast_counties,
-        "Southern San Joaquin Valley" = s_san_joaquin_counties,
-        "Inland Empire" = inland_counties,
-        "Los Angeles County" = la_county,
-        "Orange County" = orange_county,
-        "San Diego-Imperial" = san_diego_imperial_counties))
+make_title <- function(var){
+  rlang::enquo(var) |> 
+    rlang::as_label() |> 
+    str_replace_all(pattern = "_",
+                    replacement = " ") |> 
+    str_to_title() |> 
+    str_replace_all("Mm$", "mm") |> 
+    str_replace_all("G$", "g")
+}
 ```
 
 -   Date (example must use functions from **lubridate**)
@@ -488,6 +516,17 @@ person3
 ```{r}
 #| label: wd-5-inner-ex-2
 
+# Lab 4, Q2
+# I changed my left_join to an inner_join
+
+ca_childcare <- counties |> 
+  filter(
+    state_name == "California"
+    ) |> 
+inner_join(y = childcare_costs,
+          by = join_by(county_fips_code == county_fips_code)
+          )
+ca_childcare
 ```
 
 **WD-6: I can use filtering joins to filter rows from a dataframe.**
@@ -500,7 +539,7 @@ person3
 # Lab 5, Inspecting Witnesses
 # semi-join() revised
 
-person2 <- person1 |> 
+witness_matches <- witness_candidates |> 
   filter(
     (address_street_name == "Franklin Ave" & str_detect(person$name, pattern = "^Annabel")) |
     (address_street_name == "Northwestern Dr" & 
@@ -510,12 +549,12 @@ person2 <- person1 |>
     name,
     address_street_name
   )
-person2 <- person1 |> 
+witness_matches <- witness_candidates |> 
   semi_join(
-    person2, 
+    witness_matches, 
     by = join_by(name, address_street_name)
   )
-person2
+witness_matches
 ```
 
 -   `anti_join()`
@@ -548,7 +587,7 @@ person2
 
 center_based_childcare <- ca_childcare |> 
  filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
- select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
+ select(region, study_year) |> 
   pivot_longer(
     cols = starts_with("mc_"),
     names_to = "age_group",
@@ -686,6 +725,25 @@ jeremy_bowers_interview
 ```{r}
 #| label: r-3-example
 
+# Lab 8, Q4
+
+style_plot <- function(my_plot,
+                       theme_fn = theme_bw,
+                       colors = RColorBrewer::brewer.pal(8, "Set2"),
+                       aesthetic = "color") {
+  
+  if (aesthetic == "color") {
+    my_plot <- my_plot + scale_color_manual(values = colors)
+    
+  } else if (aesthetic == "fill") {
+    my_plot <- my_plot + scale_fill_manual(values = colors)
+    
+  } else {
+    stop("aesthetic must be 'color' or 'fill'")
+  }
+  
+  my_plot + theme_fn()
+}
 ```
 
 -   Example (function stops)
@@ -693,6 +751,22 @@ jeremy_bowers_interview
 ```{r}
 #| label: r-3-function-stops
 
+# Lab 8, Q1
+
+# Tidy (unquoted) variable names
+rescale_column(df, c(height, weight))
+
+# Quoted variable names
+rescale_column(df, c("height", "weight"))
+#| label: rescale_01
+rescale_01 <- function(x) {
+    stopifnot(is.numeric(x),
+            length(x) > 1)
+  rng <- range(x, na.rm = TRUE)
+  rescaled <- (x-rng[1]) / (rng[2] - rng [1])
+    
+  return(rescaled)
+} 
 ```
 
 ## Data Visualization & Summarization
@@ -749,6 +823,7 @@ ggplot(data = surveys,
 #| label: dvs-2-date
 
 # Lab 4, Q7
+# I added label_currency() to add dollar signs to my y-axis
 
 ggplot(data = center_based_childcare,
        aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
@@ -757,6 +832,7 @@ ggplot(data = center_based_childcare,
   scale_color_brewer(palette = "Set3") + 
   facet_wrap (~ age_group) +
   scale_x_continuous(breaks = seq (2008, 2018, by = 2)) +
+  scale_y_continuous(labels = scales::label_currency(prefix = "$")) +
   labs(
     title = "Weekly Median Price for Center-Based Childcare ($)",
     x = "Study Year",
@@ -930,6 +1006,39 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-3-2
 
+# Lab 10, Q3
+
+barplot_prop <- results |> 
+  enframe(name = "Number of Babies",
+          value = "Proportion of Correct Babies") |> 
+  count(`Proportion of Correct Babies`) |> 
+  mutate(
+    proportion = n / sum(n)
+  )
+
+  ggplot(
+    data = barplot_prop,
+    mapping = aes(
+      x = factor(`Proportion of Correct Babies`),
+      y = proportion
+    )
+  ) +
+    geom_col(fill = "lightpink") +
+    geom_text(aes(label = label_percent(accuracy = 1)
+                                        (proportion)),
+                  vjust = -0.5) +
+    scale_y_continuous(labels = label_percent(accuracy = 1),
+                       expand = expansion(mult = c(0, 0.1))) +
+      labs(
+      title = "Percentage of Babies Returned to Correct Families",
+      subtitle = "Running 10,000 Simulations, assuming 4 babies were born",
+      x = "Number of Correct Babies",
+      y = ""
+    ) +
+    theme_bw() +
+    theme(
+      plot.title = element_text(size = 15)
+    )
 ```
 
 -   I can choose creative geometries (e.g., `geom_segment()`, `geom_ribbon)()`)
@@ -1045,6 +1154,67 @@ region_median_income
 ```{r}
 #| label: dvs-6-ex-2
 
+# Lab 9, Q6
+
+teacher_evals_factors |> 
+  filter(no_participants > 10) |> 
+  distinct(teacher_id, .keep_all = TRUE) |> 
+  select(
+    academic_degree, seniority, sex
+    ) |> 
+  map_at(
+    .at = c("course_id", "weekday", "academic_degree", "time_of_day", "sex"), 
+    .f = as.factor) |> 
+  bind_cols() |> 
+  rename(
+    `Academic Degree` = academic_degree, 
+    Sex = sex
+  ) |> 
+  mutate(
+    `Academic Degree` = fct_recode(`Academic Degree`,
+                                 "No Degree" = "no_dgr",
+                                 "Masters" = "ma",
+                                 "Doctorate" = "dr",
+                                 "Tenured Professor" = "prof"),
+  Seniority = case_when(seniority <= 4 ~ "Junior",
+                          seniority >= 5 & seniority <= 8 ~ "Senior",
+                          seniority > 8 ~ "Very Senior"),
+  Sex = fct_recode(
+    Sex,
+    "Female" = "female",
+    "Male" = "male")
+  ) |> 
+    pivot_longer(
+      cols = c(`Academic Degree`, Seniority, Sex),
+      names_to = "variable",
+      values_to = "level") |> 
+    count(variable, level) |> 
+    group_by(variable) |> 
+    mutate(prop = n/sum(n)) |> 
+    ungroup() |> 
+  gt(groupname_col = "variable",
+     rowname_col = "level") |> 
+  tab_style(
+    style = list(
+    cell_fill(color = "lightblue"),
+              cell_text(weight = "bold")
+    ),
+            locations = cells_row_groups()
+    ) |> 
+  tab_stubhead(label = "Demographics") |> 
+      tab_header(title = "Demographics of Professors",
+                 subtitle = "Student Evaluations at the University of Poland, Warsaw in 2020") |> 
+  tab_spanner(
+    label = "Professors",
+    columns = c(n, prop)
+  ) |> 
+  cols_label(
+    variable = "Demographic",
+    n = "Count", 
+    prop = "%"
+    ) |> 
+   fmt_percent(columns = c(prop), 
+              decimals = 1) 
 ```
 
 -   I can arrange my table to have an intuitive ordering
@@ -1084,6 +1254,42 @@ region_median_income
 ```{r}
 #| label: dvs-7-ex-1
 
+# Lab 9, Q8
+
+fish |> 
+  map_int(.f = ~ sum(is.na(.x))) |> 
+  enframe(name = "Measurement Variable",
+          value = "Missing Values") |> 
+  arrange(desc(`Missing Values` == 0)) |> 
+  gt() |> 
+      tab_header(title = "Number of Missing Values for Fish Measurements",
+                 subtitle = "Data Collected From 1989 to 2006 on the BlackFoot Fish River in Montana") |> 
+  tab_style(
+    style = cell_text(weight = "bold"), 
+    locations = cells_column_labels(
+      columns = c(`Measurement Variable`, `Missing Values`)
+    )
+  ) |> 
+  tab_style(
+    style = list(
+      cell_fill(color = "mediumaquamarine"), 
+    cell_text(color = "white")
+    ),
+    locations = cells_body(
+      columns = c(`Missing Values`),
+      rows = `Missing Values` == 0 
+    )
+) |> 
+  tab_style(
+    style = list(
+      cell_fill(color = "chocolate"),
+    cell_text(color = "white")
+    ),
+    locations = cells_body(
+      columns = c(`Missing Values`),
+      rows = `Missing Values` > 0
+    )
+  )
 ```
 
 -   I can modify the layout of my table to be more readable (e.g., `pivot_longer()` or `pivot_wider()`)
@@ -1091,6 +1297,20 @@ region_median_income
 ```{r}
 #| label: dvs-7-ex-2
 
+# Lab 10, Q2
+
+table_data_prop <- results |> 
+  enframe(name = "Number of Babies",
+          value = "Proportion of Correct Babies") |> 
+  count(`Proportion of Correct Babies`) |> 
+  mutate(
+    proportion = n / sum(n)
+  ) |> 
+  select(`Proportion of Correct Babies`, proportion) |> 
+  pivot_wider(
+    names_from = `Proportion of Correct Babies`,
+    values_from = proportion
+  )
 ```
 
 ## Program Efficiency
@@ -1248,62 +1468,8 @@ kable()
 #| label: pe-4-1
 
 # Lab 4, Q7
+# I added label_currency() to add dollar signs to my y-axis
 
-# I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool)
-
-
-center_based_childcare <- ca_childcare |> 
- filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
- select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
-  pivot_longer(
-    cols = starts_with("mc_"),
-    names_to = "age_group",
-    values_to = "median_weekly_price"
-  ) |> 
-  mutate (
-    age_group = fct_relevel(fct_recode(age_group,
-                                       "Infant" = "mc_infant",
-                                       "Toddler" = "mc_toddler",
-                                       "Preschool" = "mc_preschool"),
-                            "Infant",
-                            "Toddler",
-                            "Preschool"))
-```
-
--   I can connect a data wrangling pipeline into a `ggplot()`
-
-```{r}
-#| label: pe-4-2
-
-#Lab 4, Q7
-
-# https://www.youtube.com/watch?v=UVriK-W1DNg&t=760s I used this youtube video to help me rescale my x-axis to be the evenly spaced years from 2008 to 2018.
-
-# Growing Comments: Nice work pivoting and modifying the age variable!
-# Nice work reordering your legend!
-# Can you reorder the facets so they go in the same order as mine?
-# I like your colors!!!
-
-# Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
-# I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool)
-
-center_based_childcare <- ca_childcare |> 
- filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
- select(region, study_year, mc_infant, mc_toddler, mc_preschool) |> 
-  pivot_longer(
-    cols = starts_with("mc_"),
-    names_to = "age_group",
-    values_to = "median_weekly_price"
-  ) |> 
-  mutate (
-    age_group = fct_relevel(fct_recode(age_group,
-                                       "Infant" = "mc_infant",
-                                       "Toddler" = "mc_toddler",
-                                       "Preschool" = "mc_preschool"),
-                            "Infant",
-                            "Toddler",
-                            "Preschool"))
-  
 ggplot(data = center_based_childcare,
        aes(x = study_year, y = median_weekly_price, color = fct_reorder2(region, study_year, median_weekly_price))) +
   geom_point(alpha = 0.7) +
@@ -1311,6 +1477,7 @@ ggplot(data = center_based_childcare,
   scale_color_brewer(palette = "Set3") + 
   facet_wrap (~ age_group) +
   scale_x_continuous(breaks = seq (2008, 2018, by = 2)) +
+  scale_y_continuous(labels = scales::label_currency(prefix = "$")) +
   labs(
     title = "Weekly Median Price for Center-Based Childcare ($)",
     x = "Study Year",
@@ -1319,6 +1486,13 @@ ggplot(data = center_based_childcare,
   ) +
   theme(aspect.ratio = 1,
         axis.text.x = element_text(size = 6))
+```
+
+-   I can connect a data wrangling pipeline into a `ggplot()`
+
+```{r}
+#| label: pe-4-2
+
 ```
 
 ## Data Simulation & Statisical Models
@@ -1352,7 +1526,7 @@ randomBabies <- function(n = 4){
 ```{r}
 #| label: dsm-1-2
 
-# Lab 10, Q 8
+# Lab 10, Q8
 
 true_slope <- 1
 
@@ -1409,19 +1583,13 @@ chisq.test(table(teacher_evals_compare$set_level,
 ```{r}
 #| label: dsm-2-2
 
-# Lab 4, Q9
-
-# Linear regression
-
-ca_childcare <- lm(mc_infant ~ mhi_2018, data = ca_childcare)
-summary(ca_childcare)
 ```
 
 -   Example 3
 
 ```{r}
 #| label: dsm-2-3
-
+98
 ```
 
 ## Revising My Thinking
