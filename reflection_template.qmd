@@ -656,8 +656,8 @@ The following assignments satisfy the above criteria:
 -   Challenge 2
 -   Challenge 3
 -   Lab 5
--   Example 4
--   Example 5
+-   Lab 8
+-   Lab 7
 
 **R-2: I can write well documented and tidy code.**
 
@@ -751,21 +751,18 @@ style_plot <- function(my_plot,
 ```{r}
 #| label: r-3-function-stops
 
-# Lab 8, Q1
+# Lab 7, Q4
 
-# Tidy (unquoted) variable names
-rescale_column(df, c(height, weight))
-
-# Quoted variable names
-rescale_column(df, c("height", "weight"))
-#| label: rescale_01
 rescale_01 <- function(x) {
-    stopifnot(is.numeric(x),
+  stopifnot(is.numeric(x),
             length(x) > 1)
   rng <- range(x, na.rm = TRUE)
   rescaled <- (x-rng[1]) / (rng[2] - rng [1])
-    
+  
   return(rescaled)
+}
+fish_rescaled <- fish |> 
+  mutate(across(c(weight, length), rescale_01))
 } 
 ```
 
