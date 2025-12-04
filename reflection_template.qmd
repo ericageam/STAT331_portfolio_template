@@ -5,6 +5,7 @@ format: html
 embed-resources: true
 layout: margin-left
 editor: visual
+theme: cosmo
 execute: 
   eval: false
   echo: true
@@ -88,7 +89,29 @@ teacher_evals_compare
 #| label: wd-2-ex-2
 
 # Lab 3, Q5
+# I modified my code to use select(-c())to remove unwanted columns, where I previously used select() to keep desired columns
 
+teacher_evals_clean <- teacher_evals |> 
+  rename(sex = gender) |> 
+  filter(no_participants > 10) |> 
+  mutate(teacher_id = as.character(teacher_id),
+         course_id = as.character(course_id)
+         ) |> 
+  select(-c(stud_grade_avg,
+         stud_grade_std,
+         stud_grade_var_coef,
+         percent_failed,
+         stud_grade_avg_cur,
+         stud_grade_std_cur,
+         stud_grade_var_coef_cur,
+         class_duration,
+         weekday,
+         time_of_day,
+         SET_score_1sem,
+         maximum_score))
+
+  
+teacher_evals_clean
 ```
 
 -   Example selecting columns based on logical values (e.g., `starts_with()`, `ends_with()`, `contains()`, `where()`)
@@ -538,6 +561,7 @@ ca_childcare
 
 # Lab 5, Inspecting Witnesses
 # semi-join() revised
+# Dr. T advised me to change the object names to make them more clear to the reader, so I did
 
 witness_matches <- witness_candidates |> 
   filter(
@@ -706,16 +730,21 @@ teacher_evals_compare
 ```{r}
 #| label: r-2-3
 
-# Lab 5, Jeremy Bowers Interview
+# Lab 10, Q1
 
-jeremy_bowers_interview <- interview |> 
-  right_join(person3,
-            by = join_by(person_id == id)
-            ) |> 
-  select(name, transcript)
+randomBabies <- function(n = 4){
+  baby_data <- tibble(baby = 1:n,
+    family = sample(1:n,
+                    size = n, 
+                    replace = FALSE)
+  )
 
-  
-jeremy_bowers_interview
+  double_babies <- baby_data |> 
+    filter(baby == family) |> 
+    nrow()
+  return(double_babies)
+
+}
 ```
 
 **R-3: I can write robust programs that are resistant to changes in inputs.**
@@ -751,19 +780,20 @@ style_plot <- function(my_plot,
 ```{r}
 #| label: r-3-function-stops
 
-# Lab 7, Q4
+# Challenge 7, Q2
 
-rescale_01 <- function(x) {
-  stopifnot(is.numeric(x),
-            length(x) > 1)
-  rng <- range(x, na.rm = TRUE)
-  rescaled <- (x-rng[1]) / (rng[2] - rng [1])
+change_na <- function(x, min, max) {
+  stopifnot("Input x must be numeric" = is.numeric(x), 
+          "Input x must have values larger than 0" = any(x > 0), 
+          "Max must be a scalar value" = length(max) == 1, 
+          "Min must be a scalar value" = length(min) == 1)
   
-  return(rescaled)
+  case_when(
+    x < min ~ NA_real_,
+    x > max ~ NA_real_,
+    .default = x
+  )
 }
-fish_rescaled <- fish |> 
-  mutate(across(c(weight, length), rescale_01))
-} 
 ```
 
 ## Data Visualization & Summarization
@@ -811,7 +841,27 @@ ggplot(data = surveys,
 ```{r}
 #| label: dvs-2-cat
 
+# Lab 7, Q3
 
+ggplot(data = fish_na_visual,
+       aes(x = factor(year),
+           y = total_missing,
+           fill = section)) +
+  geom_col(position = "dodge") +
+  facet_wrap (~ trip) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(
+    title = "Frequency of Missing Values Across Years, Sections, and Trips",
+    subtitle = "For Trout Measurements From Blackfoot River, MT",
+    x = "Year",
+    y = "Number of Missing Values", 
+    fill = "Section" 
+  ) + 
+  theme_bw() +
+  theme(
+    plot.title = element_text(face = "bold"),
+    axis.text.x = element_text(size = 6)
+  )
 ```
 
 -   Dates (time series plot)
@@ -1043,6 +1093,56 @@ barplot_prop <- results |>
 ```{r}
 #| label: dvs-3-3
 
+# Lab 10, Q13
+# I used geom_errorbar()
+
+true_slope <- 0.5
+set.seed(23)
+hundred_sim_dataset <- map(.x = 1:100,
+              .f = ~ mycifun(
+                beta0 = 3,
+                beta1 = 0.5,
+                n = 100
+                )
+              ) |> 
+  bind_rows() |> 
+  mutate(sim = row_number()
+         )
+
+coverage_plot <- ggplot(
+  hundred_sim_dataset,
+  aes(y = sim, xmin = conf.low, xmax = conf.high,
+      color = factor(cover)
+      )
+) +
+  geom_errorbar(height = 0.2) +
+  geom_vline(xintercept = 0.5, linetype = "dashed", linewidth = 0.2) +
+  geom_text(
+    aes(x = 0.55, y = max(sim) + 5,
+                label = "population slope = 0.5"),
+                color = "gray11",
+                size = 4,
+                hjust = 0,
+                vjust = 0) +
+  scale_color_manual(values = c("red4", "lightblue3", "gray11"),
+                     labels = c("Missed", "Captured")
+                     ) +
+  labs(
+    x = "Slope Coefficient Estimate",
+    y = "",
+    color = "Coverage",
+    title = "95% Confidence Intervals of Estimated Regression Slope for\n100 Simulated Datasets",
+    subtitle = "CI's that <b>do not</b> include the population slope are highlighted in  <span style='color:#8B0000;'>red</span>  "
+  ) +
+  theme_bw() +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+legend.position = "none",
+plot.subtitle = element_markdown()
+)
+
+coverage_plot
 ```
 
 **DVS-4: I can calculate numerical summaries of variables.**
@@ -1052,24 +1152,11 @@ barplot_prop <- results |>
 ```{r}
 #| label: dvs-4-summarize
 
-# Lab 3, Q11
+# Lab 10, Q12
 
-# Growing Comments: This also suggests there is *one* max and *one* min. Is that the case? Were there ties?
-
-# Revisions: I mistakenly used slice(which.min()) which.max()), which only gave me the minimum and maximum of a [variable] for only one instructor, when in fact, there were multiple instructors that held the minimum and maximum of [variable], and were therefore tied. 
-
-# I replaced slice(which.min()) which.max()) with  filter(avg.resp_share == min(avg.resp_share) | avg.resp_share == max(avg.resp_share). As a result, I’ve discovered the instructors that were tied with each other regarding the lowest average percentage of students responding to the evaluations across courses.
-
-teacher_evals_clean |> 
-  filter(seniority == 1) |> 
-  group_by(teacher_id) |> 
-  summarize(
-  avg_percent_failed_cur = mean(percent_failed_cur, na.rm = TRUE),
-  .groups = "drop"
-) |> 
-  filter(
-        avg_percent_failed_cur == min(avg_percent_failed_cur) | avg_percent_failed_cur == max(avg_percent_failed_cur)
-  )
+ci_dat <- ci_dat |> 
+  summarize(rate = mean(cover))
+ci_dat
 ```
 
 -   Example using `across()`
@@ -1077,7 +1164,13 @@ teacher_evals_clean |>
 ```{r}
 #| label: dvs-4-across
 
+# Lab 7, Q1
 
+fish_na <- fish |> 
+   summarise(
+    across(everything(), ~ sum(is.na(.x)))
+  )
+fish_na
 ```
 
 **DVS-5: I can find summaries of variables across multiple groups.**
@@ -1105,15 +1198,17 @@ teacher_evals_clean |>
 ```{r}
 #| label: dvs-5-2
 
-# Lab 4, Q6
+# Lab 7, Q3
 
-region_median_weekly_price <- ca_childcare |>
- filter(study_year == 2018) |> 
-  group_by(region) |> 
-  summarize(median_weekly_price = median(mc_infant, na.rm = TRUE), .groups = "drop") |> 
-  slice(which.min(median_weekly_price))
-
-region_median_weekly_price
+fish_na_visual <- fish |> 
+  group_by(
+    year,
+    section,
+    trip
+  ) |> 
+  summarise(
+    total_missing = sum(across(everything(), ~ sum(is.na(.x)))),
+    .groups = "drop"
 ```
 
 **DVS-6: I can create tables which make my summaries clear to the reader.**
@@ -1347,13 +1442,10 @@ rich_woman
 ```{r}
 #| label: pe-1-across
 
-# Lab 7, Q1
+# Lab 7, Q4
 
-fish_na <- fish |> 
-   summarise(
-    across(everything(), ~ sum(is.na(.x)))
-  )
-fish_na
+fish_rescaled <- fish |> 
+  mutate(across(c(weight, length), rescale_01))
 ```
 
 -   using functions from the `map()` family
@@ -1420,6 +1512,21 @@ pivot_table(df = penguins,
 ```{r}
 #| label: pe-2-3
 
+# Lab 10, Q1
+
+randomBabies <- function(n = 4){
+  baby_data <- tibble(baby = 1:n,
+    family = sample(1:n,
+                    size = n, 
+                    replace = FALSE)
+  )
+
+  double_babies <- baby_data |> 
+    filter(baby == family) |> 
+    nrow()
+  return(double_babies)
+
+}
 ```
 
 **PE-3: I can use iteration to reduce repetition in my code.**
@@ -1429,6 +1536,11 @@ pivot_table(df = penguins,
 ```{r}
 #| label: pe-3-across
 
+# Lab 3, Q8
+# I used an if_any() to uncover any missing values
+
+teacher_evals_clean |> 
+  filter(if_any(everything(), is.na))
 ```
 
 -   using a `map()` function with **one** input (e.g., `map()`, `map_chr()`, `map_dbl()`, etc.)
@@ -1490,6 +1602,39 @@ ggplot(data = center_based_childcare,
 ```{r}
 #| label: pe-4-2
 
+# Lab 10, Q3
+# I deleted the assignment arrow and the new object and made a new pipeline to pipe it to ggplot
+
+results |> 
+  enframe(name = "Number of Babies",
+          value = "Proportion of Correct Babies") |> 
+  count(`Proportion of Correct Babies`) |> 
+  mutate(
+    proportion = n / sum(n)
+  ) |> 
+
+  ggplot(
+    mapping = aes(
+      x = factor(`Proportion of Correct Babies`),
+      y = proportion
+    )
+  ) +
+    geom_col(fill = "lightpink") +
+    geom_text(aes(label = label_percent(accuracy = 1)
+                                        (proportion)),
+                  vjust = -0.5) +
+    scale_y_continuous(labels = label_percent(accuracy = 1),
+                       expand = expansion(mult = c(0, 0.1))) +
+      labs(
+      title = "Percentage of Babies Returned to Correct Families",
+      subtitle = "Running 10,000 Simulations, assuming 4 babies were born",
+      x = "Number of Correct Babies",
+      y = ""
+    ) +
+    theme_bw() +
+    theme(
+      plot.title = element_text(size = 15)
+    )
 ```
 
 ## Data Simulation & Statisical Models
@@ -1568,11 +1713,10 @@ return(tidy_model)
 #| label: dsm-2-1
 
 # Challenge 3, Q3
+# Chi-square Test
 
-# Chi-squared test
-
-chisq.test(table(teacher_evals_compare$set_level,
-                 teacher_evals_compare$sen_level))        
+chisq.test(teacher_evals_compare$set_level, 
+           teacher_evals_compare$sen_level)
 ```
 
 -   Example 2
@@ -1580,13 +1724,27 @@ chisq.test(table(teacher_evals_compare$set_level,
 ```{r}
 #| label: dsm-2-2
 
+# Lab 4, Q9
+# Fitting a linear regression model to Median Household Income in 2018 and Childcare Costs for Infants
+
+ca_childcare <- lm(mc_infant ~ mhi_2018, 
+                   data = ca_childcare)
+summary(ca_childcare)
 ```
 
 -   Example 3
 
 ```{r}
 #| label: dsm-2-3
-98
+
+# Lab 2, Q17
+# ANOVA 
+
+formula <- weight ~ species
+
+species_mod <- aov(formula, data = surveys, projections = FALSE, qr = TRUE, contrasts = NULL)
+
+summary(species_mod)
 ```
 
 ## Revising My Thinking
