@@ -1739,7 +1739,8 @@ chisq.test(teacher_evals_compare$set_level,
 #| label: dsm-2-2
 
 # Lab 4, Q9
-# Fitting a linear regression model to Median Household Income in 2018 and Childcare Costs for Infants
+# Fitting a linear regression model to Median Household Income in 2018 
+# and Childcare Costs for Infants
 
 ca_childcare <- lm(mc_infant ~ mhi_2018, 
                    data = ca_childcare)
@@ -1753,7 +1754,8 @@ summary(ca_childcare)
 
 # Lab 2, Q17
 # ANOVA 
-# In this question I explored whether at least one rodent species has a different population mean weight
+# In this question I explored whether at least one rodent species 
+# has a different population mean weight
 
 formula <- weight ~ species
 
@@ -1776,7 +1778,7 @@ Within my portfolio, I included both growing and success comments as well as my 
 
 <!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
 
-To extend my thinking, I revised some of my code in order to meet the requirements for certain learning objectives. For example, for learning objectives **wd-5-right**, **wd-5-inner-ex1**, and **wd-6-semi**, I changed my left-join() functions to a right-join(), inner-join(), and semi-join(), respectively. Moreover, as seen in learning objective **r-2-1**, (challenge 2), I used colorbrewerpalette() to change the colors of my boxplots, as I like to make my visualizations more unique and personalized. I also always like to include **theme: cosmo** in my YAML header and include a table of contents to make my documents more aesthetically pleasing and easy to navigate. Additionally, I make sure that all my code is readable and tidy by incorporating white space and named arguments. Lastly, in my portfolio, I added code comments (as seen in the Data Visualization) section to explain why I chose a palette, theme, or did a reordering in the plot.
+To extend my thinking, I revised some of my code in order to meet the requirements for certain learning objectives. For example, for learning objectives **wd-5-right**, **wd-5-inner-ex1**, and **wd-6-semi**, I changed my left-join() functions to a right-join(), inner-join(), and semi-join(), respectively. Moreover, as seen in learning objective **r-2-1**, (challenge 2), I used colorbrewerpalette() to change the colors of my boxplots, as I like to make my visualizations more unique and personalized. I also always like to include **theme: cosmo** in my YAML header and include a table of contents to make my documents more aesthetically pleasing and easy to navigate. Additionally, I make sure that all my code is readable and tidy by incorporating white space and named arguments. Lastly, in my portfolio, I added code comments (as seen in the Data Visualization) section to explain why I chose a palette, theme, or did a reordering in the plot. Moreover, my code comments also explained why I altered my code or described what my statistical analysis did; as seen in **dsm-2-3**: Lab 2, Q 17, where I explained why I ran an ANOVA (to see whether at least one rodent species has a different population mean weight.)
 
 ## Peer Support & Collaboration
 
