@@ -587,7 +587,9 @@ witness_matches
 #| label: wd-6-anti
 
 # Lab 5, No Interviews
-# Keeps people with no interview transcripts
+# I used an anti-join to find people who do NOT have an interview transcript
+# This keeps all rows from 'person' whose id does not appear in 'interview'
+# This allows us to identify which individuals do not have to be interviewed
 
 no_interviews <- person |> 
   anti_join(interview,
