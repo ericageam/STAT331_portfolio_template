@@ -2,20 +2,27 @@
 title: "Lightening Round Essays"
 format: html
 editor: visual
+theme: cosmo
 ---
 
 **Answer each of the following questions with *one sentence* including a brief explanation.**
 
-1. Finish the sentence with another student’s name: "If [Name of Student] doesn’t earn an A, then nobody should, because..." Explain your choice and your reasoning.
+1.  Finish the sentence with another student’s name: "If \_\_\_ doesn’t earn an A, then nobody should, because..." Explain your choice and your reasoning.
 
+    **If Alexa Guadarrama doesn't earn an A, then nobody should, because she has demonstrated great eagerness to learn through labs and practice activities, asks questions (either in class or at office hours), and is always willing to learn from revisions and past misunderstandings.**
 
-2. What was the most difficult part of the class for you? List a general topic, a specific problem, a kind of work we did, etc. and explain why.
+2.  What was the most difficult part of the class for you? List a general topic, a specific problem, a kind of work we did, etc. and explain why.
 
+    **For me, the most difficult part of class was learning Base R and writing vector functions, as it has been a while since I have taken a coding/computer science course; yet through our labs and practice activities, I have gained much more experience in writing functions, and find it much more easier and engaging.**
 
-3. What was the easiest part of the class for you? Explain why.
+3.  What was the easiest part of the class for you? Explain why.
 
+    **The easiest (and one of my favorites!) part of the class was learning data cleaning and manipulation (dplyr), as all of the dplyr function names (e.g. filter) essentially defined their purpose/task, so it was easy to use them to clean a dataset and locate the item/person I was looking for.**
 
-4. What part of the class surprised or interested you the most? Explain why.
+4.  What part of the class surprised or interested you the most? Explain why.
 
+    **I was really interested in learning how to make professional-looking plots/tables using R, as it is essential (and impressive) to showcase a plot/table that accurately represents the data you want to convey to your audience.**
 
-5. Give one piece of advice to a student just beginning a quarter of STAT 331 that will help them be successful in learning.
+5.  Give one piece of advice to a student just beginning a quarter of STAT 331 that will help them be successful in learning.
+
+    **At the beginning of the quarter, you might feel a little anxious or doubtful about your R/coding skills, but as you learn from Dr. T and your classmates, read the textbook, and ask questions, you will soon gain a lot more confidence in yourself, as well as really grow to love R (even more)!**
