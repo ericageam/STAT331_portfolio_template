@@ -49,6 +49,7 @@ tax_rev <- read_csv('https://atheobold.github.io/groupworthy-data-science/labs/i
 #| label: wd-1-xlsx
 
 # PA 4
+# I used a practice activity because we didn't read in an xlsx file in any of our labs
 
 library(tidyverse)
 library(readxl)
@@ -89,7 +90,9 @@ teacher_evals_compare
 #| label: wd-2-ex-2
 
 # Lab 3, Q5
-# I modified my code to use select(-c())to remove unwanted columns, where I previously used select() to keep desired columns
+# I modified my code to remove several unnecessary variables using select(-c())
+# This allowed me to efficiently drop columns at once
+# As a result, my output gave me my desired variables
 
 teacher_evals_clean <- teacher_evals |> 
   rename(sex = gender) |> 
@@ -126,7 +129,7 @@ teacher_evals_clean
 # I like your colors!!!
 
 # Revisions: I added fct_relevel and fct_recode to change my facets to be in the order of “infant”, “toddler,” and “preschool.” This makes it easier to compare my facets based on developmental stages, and not alphabetically. I will be sure to use fct_relevel and fct_recode in my future assignments, to make my facets more interpretable to the reader. 
-# I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool) and deleted them from my select, as it was redundant
+# I also added starts_with(), which selects the variables that start with mc (e.g. mc_infant, mc_toddler, mc_preschool) and deleted these variables from my select, as it was redundant
 
 center_based_childcare <- ca_childcare |> 
  filter(study_year %in% c (2008, 2010, 2012, 2014, 2016, 2018)) |> 
@@ -751,7 +754,6 @@ randomBabies <- function(n = 4){
     filter(baby == family) |> 
     nrow()
   return(double_babies)
-
 }
 ```
 
@@ -763,6 +765,7 @@ randomBabies <- function(n = 4){
 #| label: r-3-example
 
 # Lab 8, Q4
+# I added an input check to ensure that aesthetic values were either 'fill' or 'color'
 
 style_plot <- function(my_plot,
                        theme_fn = theme_bw,
@@ -1062,6 +1065,7 @@ ggplot(data = surveys,
 #| label: dvs-3-2
 
 # Lab 10, Q3
+# I added geom_text to add text percentages on top of each bar so the reader can clearly interpret the percentages
 
 barplot_prop <- results |> 
   enframe(name = "Number of Babies",
@@ -1102,7 +1106,7 @@ barplot_prop <- results |>
 #| label: dvs-3-3
 
 # Lab 10, Q13
-# I used geom_errorbar()
+# I used geom_errorbar() to represent my confidence intervals
 
 true_slope <- 0.5
 set.seed(23)
@@ -1545,7 +1549,7 @@ randomBabies <- function(n = 4){
 #| label: pe-3-across
 
 # Lab 3, Q8
-# I used an if_any() to uncover any missing values
+# I used a filter(if_any()) to find missing values
 
 teacher_evals_clean |> 
   filter(if_any(everything(), is.na))
@@ -1565,16 +1569,17 @@ surveys |>
 kable()
 ```
 
--   using a `map()` function with **more than one** input (e.g., `map_2()` or `pmap()`)
+-   using a `map()` function with **one** input (e.g., `map()`, `map_chr()`, `map_dbl()`, etc.)
 
 ```{r}
 #| label: pe-3-map-2
 
-# Lab 9, Q5
+# Lab 9, Q7
 
- map_at(
-    .at = c("course_id", "weekday", "academic_degree", "time_of_day", "sex"), 
-    .f = as.factor)
+fish |> 
+  map_int(.f = ~ sum(is.na(.x))) |> 
+  enframe(name = "Measurement Variable",
+          value = "Missing Values")
 ```
 
 **PE-4: I can use modern tools when carrying out my analysis.**
@@ -1611,7 +1616,7 @@ ggplot(data = center_based_childcare,
 #| label: pe-4-2
 
 # Lab 10, Q3
-# I deleted the assignment arrow and the new object and made a new pipeline to pipe it to ggplot
+# I deleted my newly made object and instead made a new pipeline into ggplot()
 
 results |> 
   enframe(name = "Number of Babies",
@@ -1667,7 +1672,6 @@ randomBabies <- function(n = 4){
     filter(baby == family) |> 
     nrow()
   return(double_babies)
-
 }
 ```
 
@@ -1722,6 +1726,8 @@ return(tidy_model)
 
 # Challenge 3, Q3
 # Chi-square Test
+# I used a Chi-square test to check independence between SET level (evaluation rating of Q3: The professor used activities to make the class 
+# more engaging) and instructor seniority level (years of experience)
 
 chisq.test(teacher_evals_compare$set_level, 
            teacher_evals_compare$sen_level)
@@ -1747,6 +1753,7 @@ summary(ca_childcare)
 
 # Lab 2, Q17
 # ANOVA 
+# In this question I explored whether at least one rodent species has a different population mean weight
 
 formula <- weight ~ species
 
