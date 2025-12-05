@@ -586,8 +586,14 @@ witness_matches
 ```{r}
 #| label: wd-6-anti
 
+# Lab 5, No Interviews
+# Keeps people with no interview transcripts
 
-
+no_interviews <- person |> 
+  anti_join(interview,
+          by = join_by(id == person_id)
+          ) 
+no_interviews
 ```
 
 **WD-7: I can pivot dataframes from long to wide and visa versa**
